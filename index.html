@@ -12,84 +12,86 @@ margin:0;
 background:#f4f6f8;
 color:#222;
 }
-
 header{
-background:#1f4d3a;
+background:#176b3a;
 color:white;
 padding:20px;
 text-align:center;
 }
-
 .container{
-max-width:950px;
+max-width:1000px;
 margin:auto;
-padding:20px;
+padding:15px;
 }
-
 .card{
 background:white;
 padding:20px;
 margin:15px 0;
 border-radius:12px;
-box-shadow:0 2px 8px #0002;
+box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
-
-h2{
-color:#1f4d3a;
-}
-
+h2{color:#176b3a;}
 label{
 display:block;
 font-weight:bold;
-margin-top:12px;
+margin-top:10px;
 }
-
 input,select{
 width:100%;
-padding:11px;
+padding:10px;
 margin-top:5px;
 border:1px solid #ccc;
 border-radius:7px;
 box-sizing:border-box;
 }
-
 button{
-background:#1f4d3a;
+background:#176b3a;
 color:white;
 border:none;
 padding:12px 18px;
 border-radius:7px;
-margin-top:18px;
+margin-top:15px;
 font-weight:bold;
 cursor:pointer;
 }
-
+button:hover{opacity:.9;}
 .result{
-margin-top:15px;
+background:#eef8f1;
 padding:15px;
-background:#eef6f1;
 border-radius:8px;
-}
-
-.day{
 margin-top:15px;
-padding:15px;
-background:#eaf3ee;
-border-radius:8px;
 }
-
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:12px;
+}
+th,td{
+border:1px solid #ddd;
+padding:8px;
+text-align:left;
+font-size:14px;
+}
+th{
+background:#176b3a;
+color:white;
+}
+.tip{
+background:#fff8df;
+padding:12px;
+border-left:5px solid #d8a600;
+margin-top:10px;
+border-radius:5px;
+}
 .exercise{
+background:#f7f7f7;
 padding:12px;
 margin:8px 0;
-background:#fff;
-border-left:5px solid #1f4d3a;
-border-radius:6px;
+border-radius:8px;
 }
-
-.note{
-font-size:14px;
+.small{
+font-size:13px;
 color:#555;
-margin-top:8px;
 }
 </style>
 </head>
@@ -100,46 +102,3 @@ margin-top:8px;
 <h1>ECFP</h1>
 <p>Ethiopian Calorie & Fitness Planner</p>
 </header>
-
-<div class="container">
-
-<!-- BODY COMPOSITION -->
-
-<div class="card">
-
-<h2>1. Body Composition</h2>
-
-<label>Weight (kg)</label>
-<input id="weight" type="number">
-
-<label>Height (cm)</label>
-<input id="height" type="number">
-
-<label>Age</label>
-<input id="age" type="number">
-
-<label>Sex</label>
-<select id="sex">
-<option value="male">Male</option>
-<option value="female">Female</option>
-</select>
-
-<button onclick="calculateBMI()">Calculate</button>
-
-<div id="bmiResult" class="result"></div>
-
-</div>
-
-
-<!-- CALORIES -->
-
-<div class="card">
-
-<h2>2. Daily Calorie Requirements</h2>
-
-<label>Activity Level</label>
-
-<select id="activity">
-
-<option value="1.2">
-Sedentary –
