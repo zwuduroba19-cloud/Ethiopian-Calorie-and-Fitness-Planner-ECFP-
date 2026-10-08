@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECFP - Body Composition Calculator</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #f4f6f8;
+    color: #222;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+h2 {
+    margin-top: 25px;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+button {
+    margin-top: 25px;
+    background: #198754;
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.hidden {
+    display: none;
+}
+
+.result {
+    margin-top: 25px;
+    padding: 15px;
+    background: #eef7f0;
+    border-radius: 8px;
+}
+
+.result strong {
+    color: #146c43;
+}
+
+.note {
+    font-size: 14px;
+    color: #555;
+    margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🇪🇹 ECFP</h1>
+
+<div class="subtitle">
+Ethiopian Calorie & Fitness Planner
+</div>
+
+<h2>Body Composition Assessment</h2>
+
+<label>Sex</label>
+<select id="sex">
+    <option value="">Select sex</option>
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+</select>
+
+<label>Age (years)</label>
+<input type="number" id="age" placeholder="Example: 35">
+
+<label>Height (cm)</label>
+<input type="number" id="height" placeholder="Example: 175">
+
+<label>Current Weight (kg)</label>
+<input type="number" id="weight" placeholder="Example: 80">
+
+<label>How do you know your body-fat percentage?</label>
+<select id="bfMethod" onchange="showMethod()">
+    <option value="">Select method</option>
+    <option value="measured">I have a measured body-fat %</option>
+    <option value="estimate">Estimate from body measurements</option>
+</select>
+
+<div id="measuredBox" class="hidden">
+
+<label>Measured Body Fat (%)</label>
+<input type="number" id="bf" step="0.1" placeholder="Example: 25">
+
+</div>
+
+<div id="estimateBox" class="hidden">
+
+<p class="note">
+Enter circumference measurements in centimeters. Measure against the skin without compressing the tape.
+</p>
+
+<label>Waist Circumference (cm)</label>
+<input type="number" id="waist" placeholder="Example: 95">
+
+<label>Neck Circumference (cm)</label>
+<input type="number" id="neck" placeholder="Example: 40">
+
+<div id="hipBox" class="hidden">
+
+<label>Hip Circumference (cm)</label>
+<input type="number" id="hip" placeholder="Example: 105">
+
+</div>
+
+</div>
+
+<button onclick="calculate()">Calculate Body Composition</button>
+
+<div id="result" class="result hidden"></div>
+
+</div>
+
+<script>
+
+function showMethod() {
+
+    const method = document.getElementById("bfMethod").value;
+    const sex = document.getElementById("sex").value;
+
+    document.getElementById("measuredBox").classList.add("hidden");
+    document.getElementById("estimateBox").classList.add("hidden");
+    document.getElementById("hipBox").classList.add("hidden");
+
+    if (method === "measured") {
+        document.getElementById("measuredBox").classList.remove("hidden");
+    }
+
+    if (method === "estimate") {
+        document.getElementById("estimateBox").classList.remove("hidden");
+
+        if (sex === "female") {
+            document.getElementById("hipBox").classList.remove("hidden");
+        }
+    }
+}
+
+function calculate() {
+
+    const sex = document.getElementById("sex").value;
+    const age = parseFloat(document.getElementById("age").value);
+    const height = parseFloat(document.getElementById("height").value);
+    const weight = parseFloat(document.getElementById("weight").value);
+    const method = document.getElementById("bfMethod").value;
+
+    if (!sex || !age || !height || !weight || !method) {
+        alert("Please complete all required information.");
+        return;
+    }
+
+    let bf;
+
+    if (method === "measured") {
+
+        bf = parseFloat(document.getElementById("bf").value);
+
+        if (!bf || bf <= 0 || bf >= 60) {
+            alert("Please enter a valid body-fat percentage.");
+            return;
+        }
+
+    } else {
+
+        const waist = parseFloat(document.getElementById("waist").value);
+        const neck = parseFloat(document.getElementById("neck").value);
+
+        if (!waist || !neck) {
+            alert("Please enter waist and neck circumference.");
+            return;
+        }
+
+        if (sex === "male") {
+
+            /*
+            U.S. Navy circumference equation
+            Uses inches internally.
+            */
+
+            const h = height / 2.54;
+            const w = waist / 2.54;
+            const n = neck / 2.54;
+
+            bf = 86.010 * Math.log10(w - n)
+                 - 70.041 * Math.log10(h)
+                 + 36.76;
+
+        } else {
+
+            const hip = parseFloat(document.getElementById("hip").value);
+
+            if (!hip) {
+                alert("Please enter hip circumference.");
+                return;
+            }
+
+            const h = height / 2.54;
+            const w = waist / 2.54;
+            const n = neck / 2.54;
+            const hp = hip / 2.54;
+
+            bf = 163.205 * Math.log10(w + hp - n)
+                 - 97.684 * Math.log10(h)
+                 - 78.387;
+        }
+    }
+
+    /*
+    ECFP reference target.
+    For this first version:
+    Male = 17%
+    Female = 24%
+    */
+
+    const targetBF = sex === "male" ? 17 : 24;
+
+    const fatMass = weight * (bf / 100);
+    const fatFreeMass = weight - fatMass;
+
+    const targetWeight =
+        fatFreeMass / (1 - targetBF / 100);
+
+    const expectedReduction =
+        weight - targetWeight;
+
+    let status = "";
+
+    if (expectedReduction > 0) {
+        status = "Estimated weight reduction";
+    } else {
+        status = "No weight reduction required based on this target.";
+    }
+
+    document.getElementById("result").classList.remove("hidden");
+
+    document.getElementById("result").innerHTML = `
+
+        <h2>Body Composition Result</h2>
+
+        <p><strong>Estimated Body Fat:</strong>
+        ${bf.toFixed(1)}%</p>
+
+        <p><strong>Fat Mass:</strong>
+        ${fatMass.toFixed(1)} kg</p>
+
+        <p><strong>Fat-Free Mass:</strong>
+        ${fatFreeMass.toFixed(1)} kg</p>
+
+        <p><strong>Reference Target Body Fat:</strong>
+        ${targetBF}%</p>
+
+        <p><strong>Estimated Target Weight:</strong>
+        ${targetWeight.toFixed(1)} kg</p>
+
+        <p><strong>${status}:</strong>
+        ${Math.max(expectedReduction, 0).toFixed(1)} kg</p>
+
+        <p class="note">
+        This estimate assumes fat-free mass is maintained.
+        Actual changes may differ, especially when resistance training
+        increases or preserves muscle mass.
+        </p>
+
+    `;
+}
+
+</script>
+
+</body>
+</html>
