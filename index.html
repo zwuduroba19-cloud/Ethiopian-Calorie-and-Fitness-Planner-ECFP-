@@ -569,24 +569,236 @@ function createProgram() {
 
         result += `<p><em>Rest/recovery: 60–120 sec between strength sets.</em></p>`;
     });
+<script>
+function createProgram() {
+
+    const goal = document.getElementById("trainingGoal").value;
+    const level = document.getElementById("trainingLevel").value;
+    const type = document.getElementById("trainingType").value;
+    const days = parseInt(document.getElementById("trainingDays").value);
+
+    /* =========================
+       REP RANGES BY GOAL
+       ========================= */
+
+    let strengthRep = goal === "strength" ? "4–6" : "8–12";
+    let hypertrophyRep = goal === "muscle_gain" ? "8–12" : "8–12";
+
+    /* =========================
+       EXERCISE DATABASE
+       ========================= */
+
+    const strengthA = [
+        ["Squat", "3", strengthRep],
+        ["Push-Up / Bench Press", "3", strengthRep],
+        ["Bent-Over Row", "3", strengthRep],
+        ["Romanian Deadlift", "3", "8–10"],
+        ["Plank", "2", "30–60 sec"]
+    ];
+
+    const strengthB = [
+        ["Lunge", "3", "8–12 each leg"],
+        ["Overhead Press", "3", strengthRep],
+        ["Lat Pulldown / Pull-Up", "3", strengthRep],
+        ["Hip Thrust", "3", "8–12"],
+        ["Dead Bug", "2", "10–15 each side"]
+    ];
+
+    const upperA = [
+        ["Bench Press / Push-Up", "3", strengthRep],
+        ["Bent-Over Row", "3", strengthRep],
+        ["Overhead Press", "3", "8–12"],
+        ["Lat Pulldown / Pull-Up", "3", "8–12"],
+        ["Plank", "2", "30–60 sec"]
+    ];
+
+    const upperB = [
+        ["Incline Push-Up / Dumbbell Press", "3", "8–12"],
+        ["Seated Cable / Dumbbell Row", "3", "8–12"],
+        ["Shoulder Press", "3", "8–12"],
+        ["Lat Pulldown", "3", "8–12"],
+        ["Side Plank", "2", "20–45 sec each side"]
+    ];
+
+    const lowerA = [
+        ["Squat", "3", strengthRep],
+        ["Romanian Deadlift", "3", "8–10"],
+        ["Walking Lunge", "3", "8–12 each leg"],
+        ["Calf Raise", "2", "12–15"],
+        ["Dead Bug", "2", "10–15 each side"]
+    ];
+
+    const lowerB = [
+        ["Goblet Squat / Leg Press", "3", "8–12"],
+        ["Hip Thrust", "3", "8–12"],
+        ["Reverse Lunge", "3", "8–12 each leg"],
+        ["Calf Raise", "2", "12–15"],
+        ["Bird Dog", "2", "10–15 each side"]
+    ];
+
+    const coreA = [
+        ["Plank", "3", "30–60 sec"],
+        ["Dead Bug", "2", "10–15 each side"],
+        ["Bird Dog", "2", "10–15 each side"],
+        ["Side Plank", "2", "20–45 sec each side"]
+    ];
+
+    const coreB = [
+        ["Mountain Climber", "3", "20–30 sec"],
+        ["Reverse Crunch", "3", "10–15"],
+        ["Dead Bug", "2", "10–15 each side"],
+        ["Side Plank", "2", "20–45 sec each side"]
+    ];
+
+    const aerobicA = [
+        ["Brisk Walking", "1", "30–45 min"],
+        ["Cycling", "1", "25–40 min"]
+    ];
+
+    const aerobicB = [
+        ["Jogging", "1", "20–30 min"],
+        ["Football / Sport Activity", "1", "45–60 min"]
+    ];
+
+    /* =========================
+       PROGRAM RESULT HEADER
+       ========================= */
+
+    let result = `
+        <div class="program-card">
+
+        <h3>Advanced Weekly Training Program</h3>
+
+        <p>
+            <strong>Goal:</strong>
+            ${formatText(goal)}
+        </p>
+
+        <p>
+            <strong>Current Level:</strong>
+            ${formatText(level)}
+        </p>
+
+        <p>
+            <strong>Training Type:</strong>
+            ${formatText(type).replace(/ /g, " + ")}
+        </p>
+
+        <p>
+            <strong>Training Days:</strong>
+            ${days} days/week
+        </p>
+
+        <hr>
+    `;
+
+    let weeklyPlan = [];
+
+    /* =========================
+       SELECT PROGRAM
+       ========================= */
+
+    if (type === "strength") {
+        weeklyPlan = buildStrengthProgram(days);
+    }
+
+    else if (type === "aerobic") {
+        weeklyPlan = buildAerobicProgram(days);
+    }
+
+    else if (type === "core") {
+        weeklyPlan = buildCoreProgram(days);
+    }
+
+    else if (type === "strength_aerobic") {
+        weeklyPlan = buildStrengthAerobicProgram(days);
+    }
+
+    else if (type === "strength_core") {
+        weeklyPlan = buildStrengthCoreProgram(days);
+    }
+
+    else if (type === "aerobic_core") {
+        weeklyPlan = buildAerobicCoreProgram(days);
+    }
+
+    /* =========================
+       DISPLAY WEEKLY PLAN
+       ========================= */
+
+    weeklyPlan.forEach((day, index) => {
+
+        result += `
+            <div class="training-day">
+
+                <h4>Day ${index + 1} – ${day.name}</h4>
+        `;
+
+        day.exercises.forEach(ex => {
+
+            result += `
+                <div class="exercise">
+                    <strong>${ex[0]}</strong><br>
+                    Sets: ${ex[1]} |
+                    Reps/Time: ${ex[2]}
+                </div>
+            `;
+        });
+
+        if (day.rest) {
+            result += `
+                <p>
+                    <em>${day.rest}</em>
+                </p>
+            `;
+        }
+
+        result += `</div>`;
+    });
+
+    /* =========================
+       TRAINING PRINCIPLES
+       ========================= */
 
     result += `
         <hr>
+
         <h4>Training Principles</h4>
+
         <ul>
             <li>Use progressive overload gradually.</li>
-            <li>Maintain good exercise technique.</li>
-            <li>Stop or reduce intensity when technique breaks down.</li>
+            <li>Maintain correct exercise technique.</li>
+            <li>Train close to muscle failure when appropriate.</li>
+            <li>Do not sacrifice technique to increase resistance.</li>
+            <li>Increase resistance, repetitions, or exercise quality gradually.</li>
             <li>Allow adequate recovery between demanding sessions.</li>
-            <li>Increase resistance, repetitions, or training quality gradually.</li>
             <li>Maximum 3 sets per exercise.</li>
+            <li>Rest approximately 60–120 seconds between strength sets.</li>
+            <li>For heavy strength exercises, longer rest may be required.</li>
         </ul>
 
         <h4>Warm-Up</h4>
-        <p>5–10 minutes of light aerobic activity followed by dynamic movements.</p>
+
+        <p>
+            5–10 minutes of light aerobic activity followed by
+            dynamic mobility and movement preparation.
+        </p>
 
         <h4>Cool-Down</h4>
-        <p>5–10 minutes of low-intensity activity and gentle mobility exercises.</p>
+
+        <p>
+            5–10 minutes of low-intensity activity followed by
+            gentle mobility exercises.
+        </p>
+
+        <h4>Progression</h4>
+
+        <p>
+            When the client can complete the upper end of the
+            prescribed repetitions with good technique, gradually
+            increase resistance or training difficulty.
+        </p>
+
         </div>
     `;
 
@@ -594,16 +806,242 @@ function createProgram() {
 }
 
 
-function strengthSchedule(days) {
+/* =====================================================
+   STRENGTH PROGRAM
+   ===================================================== */
+
+function buildStrengthProgram(days) {
 
     let plans = [];
 
     for (let i = 0; i < days; i++) {
-        plans.push({
-            name: i % 2 === 0 ? "Strength – Full Body A" : "Strength – Full Body B",
-            exercises: [
-                ["Squat", "3", "8–12"],
-                ["Push-Up / Bench Press", "
+
+        if (i % 2 === 0) {
+
+            plans.push({
+                name: "Full Body A",
+                exercises: strengthA,
+                rest: "Rest/recovery: 60–120 seconds between strength sets."
+            });
+
+        } else {
+
+            plans.push({
+                name: "Full Body B",
+                exercises: strengthB,
+                rest: "Rest/recovery: 60–120 seconds between strength sets."
+            });
+        }
+    }
+
+    return plans;
+}
+
+
+/* =====================================================
+   AEROBIC PROGRAM
+   ===================================================== */
+
+function buildAerobicProgram(days) {
+
+    let plans = [];
+
+    for (let i = 0; i < days; i++) {
+
+        if (i % 2 === 0) {
+
+            plans.push({
+                name: "Aerobic Endurance A",
+                exercises: aerobicA,
+                rest: "Maintain a controlled intensity and recover adequately."
+            });
+
+        } else {
+
+            plans.push({
+                name: "Aerobic Endurance B",
+                exercises: aerobicB,
+                rest: "Maintain appropriate intensity and hydration."
+            });
+        }
+    }
+
+    return plans;
+}
+
+
+/* =====================================================
+   CORE PROGRAM
+   ===================================================== */
+
+function buildCoreProgram(days) {
+
+    let plans = [];
+
+    for (let i = 0; i < days; i++) {
+
+        if (i % 2 === 0) {
+
+            plans.push({
+                name: "Core Stability A",
+                exercises: coreA,
+                rest: "Rest 30–60 seconds between core exercises."
+            });
+
+        } else {
+
+            plans.push({
+                name: "Core Stability B",
+                exercises: coreB,
+                rest: "Rest 30–60 seconds between core exercises."
+            });
+        }
+    }
+
+    return plans;
+}
+
+
+/* =====================================================
+   STRENGTH + AEROBIC PROGRAM
+   ===================================================== */
+
+function buildStrengthAerobicProgram(days) {
+
+    let plans = [];
+
+    for (let i = 0; i < days; i++) {
+
+        if (i % 2 === 0) {
+
+            plans.push({
+                name: "Strength + Aerobic",
+                exercises: [
+                    ...strengthA,
+                    ["Brisk Walking / Cycling", "1", "15–25 min"]
+                ],
+                rest: "Perform strength first, followed by moderate aerobic exercise."
+            });
+
+        } else {
+
+            plans.push({
+                name: "Aerobic + Strength",
+                exercises: [
+                    ...aerobicA,
+                    ["Bodyweight Squat", "3", "8–12"],
+                    ["Push-Up", "3", "8–12"],
+                    ["Row", "3", "8–12"]
+                ],
+                rest: "Keep aerobic intensity controlled before strength work."
+            });
+        }
+    }
+
+    return plans;
+}
+
+
+/* =====================================================
+   STRENGTH + CORE PROGRAM
+   ===================================================== */
+
+function buildStrengthCoreProgram(days) {
+
+    let plans = [];
+
+    for (let i = 0; i < days; i++) {
+
+        if (i % 2 === 0) {
+
+            plans.push({
+                name: "Strength + Core A",
+                exercises: [
+                    ["Squat", "3", "8–12"],
+                    ["Push-Up / Bench Press", "3", "8–12"],
+                    ["Row", "3", "8–12"],
+                    ["Plank", "2", "30–60 sec"],
+                    ["Dead Bug", "2", "10–15 each side"]
+                ],
+                rest: "Rest 60–120 seconds between strength sets."
+            });
+
+        } else {
+
+            plans.push({
+                name: "Strength + Core B",
+                exercises: [
+                    ["Lunge", "3", "8–12 each leg"],
+                    ["Overhead Press", "3", "8–12"],
+                    ["Lat Pulldown / Pull-Up", "3", "8–12"],
+                    ["Side Plank", "2", "20–45 sec each side"],
+                    ["Bird Dog", "2", "10–15 each side"]
+                ],
+                rest: "Rest 60–120 seconds between strength sets."
+            });
+        }
+    }
+
+    return plans;
+}
+
+
+/* =====================================================
+   AEROBIC + CORE PROGRAM
+   ===================================================== */
+
+function buildAerobicCoreProgram(days) {
+
+    let plans = [];
+
+    for (let i = 0; i < days; i++) {
+
+        if (i % 2 === 0) {
+
+            plans.push({
+                name: "Aerobic + Core A",
+                exercises: [
+                    ["Brisk Walking / Cycling", "1", "25–40 min"],
+                    ["Plank", "3", "30–60 sec"],
+                    ["Dead Bug", "2", "10–15 each side"],
+                    ["Bird Dog", "2", "10–15 each side"]
+                ],
+                rest: "Maintain moderate aerobic intensity and controlled core movements."
+            });
+
+        } else {
+
+            plans.push({
+                name: "Aerobic + Core B",
+                exercises: [
+                    ["Jogging / Football", "1", "20–45 min"],
+                    ["Side Plank", "2", "20–45 sec each side"],
+                    ["Reverse Crunch", "3", "10–15"],
+                    ["Mountain Climber", "3", "20–30 sec"]
+                ],
+                rest: "Recover adequately between aerobic and core activities."
+            });
+        }
+    }
+
+    return plans;
+}
+
+
+/* =====================================================
+   TEXT FORMATTER
+   ===================================================== */
+
+function formatText(text) {
+
+    if (!text) return "";
+
+    return text
+        .replaceAll("_", " ")
+        .replace(/\b\w/g, letter => letter.toUpperCase());
+}
+
+</script>
 </script>
 
 </body>
