@@ -318,28 +318,164 @@ function createProgram() {
 
     /* TRAINING PRINCIPLES */
 
-    exercises += `
+function createProgram() {
+
+    let goal = document.getElementById("goal").value;
+    let level = document.getElementById("level").value;
+    let type = document.getElementById("type").value;
+    let days = parseInt(document.getElementById("days").value);
+
+    let goalText = {
+        fatloss: "Fat Loss",
+        muscle: "Muscle Building",
+        fitness: "General Fitness",
+        strength: "Strength"
+    };
+
+    let levelText = {
+        beginner: "Beginner",
+        intermediate: "Intermediate",
+        advanced: "Advanced"
+    };
+
+    let typeText = {
+        strength: "Strength",
+        aerobic: "Aerobic",
+        strength_aerobic: "Strength + Aerobic",
+        strength_core: "Strength + Core"
+    };
+
+    let program = `
+        <h3>Your Weekly Training Program</h3>
+
+        <p><strong>Goal:</strong> ${goalText[goal]}</p>
+        <p><strong>Level:</strong> ${levelText[level]}</p>
+        <p><strong>Training Type:</strong> ${typeText[type]}</p>
+        <p><strong>Training Days:</strong> ${days} days/week</p>
+        <hr>
+    `;
+
+    for (let day = 1; day <= days; day++) {
+
+        program += `<h3>Day ${day}</h3>`;
+
+        /* STRENGTH */
+
+        if (
+            type === "strength" ||
+            type === "strength_aerobic" ||
+            type === "strength_core"
+        ) {
+
+            if (day % 2 === 1) {
+
+                program += `
+                    <div class="exercise">
+                        <strong>Squat</strong><br>
+                        3 sets × 8–12 reps
+                    </div>
+
+                    <div class="exercise">
+                        <strong>Push-up</strong><br>
+                        3 sets × 8–15 reps
+                    </div>
+
+                    <div class="exercise">
+                        <strong>Row</strong><br>
+                        3 sets × 8–12 reps
+                    </div>
+                `;
+
+            } else {
+
+                program += `
+                    <div class="exercise">
+                        <strong>Lunge</strong><br>
+                        3 sets × 8–12 reps per leg
+                    </div>
+
+                    <div class="exercise">
+                        <strong>Shoulder Press</strong><br>
+                        3 sets × 8–12 reps
+                    </div>
+
+                    <div class="exercise">
+                        <strong>Hip Hinge / Deadlift</strong><br>
+                        3 sets × 8–12 reps
+                    </div>
+                `;
+            }
+        }
+
+        /* CORE */
+
+        if (type === "strength_core") {
+
+            program += `
+                <div class="exercise">
+                    <strong>Plank</strong><br>
+                    3 sets × 30–60 seconds
+                </div>
+
+                <div class="exercise">
+                    <strong>Dead Bug</strong><br>
+                    3 sets × 8–12 reps per side
+                </div>
+            `;
+        }
+
+        /* AEROBIC */
+
+        if (type === "aerobic") {
+
+            program += `
+                <div class="exercise">
+                    <strong>Brisk Walking</strong><br>
+                    25–40 minutes
+                </div>
+
+                <div class="exercise">
+                    <strong>Jogging / Running</strong><br>
+                    20–30 minutes
+                </div>
+            `;
+        }
+
+        /* STRENGTH + AEROBIC */
+
+        if (type === "strength_aerobic") {
+
+            program += `
+                <div class="exercise">
+                    <strong>Aerobic Conditioning</strong><br>
+                    Brisk walking, jogging, cycling or football — 20–30 minutes
+                </div>
+            `;
+        }
+    }
+
+    program += `
         <hr>
 
         <h3>Training Principles</h3>
 
         <p>
         <strong>Mechanical Tension:</strong>
-        Use appropriate resistance and controlled movement to stimulate the muscles.
+        Use appropriate resistance and controlled movement.
         </p>
 
         <p>
         <strong>Progressive Overload:</strong>
-        Gradually increase resistance, repetitions, training quality, or duration as fitness improves.
+        Gradually increase resistance, repetitions, quality or duration.
         </p>
 
         <p>
         <strong>Recovery:</strong>
-        Allow adequate recovery between training sessions and avoid excessive training volume.
+        Allow adequate recovery between training sessions.
         </p>
     `;
 
-    document.getElementById("programResult").innerHTML = exercises;
+    document.getElementById("programResult").innerHTML = program;
 }
 
 </script>
