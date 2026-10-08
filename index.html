@@ -1,204 +1,622 @@
-function calculateFoodNutrition() {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ethiopian Calorie & Fitness Planner</title>
 
-    const food = document.getElementById("foodSelect").value;
-    const servings = parseFloat(
-        document.getElementById("foodServings").value
-    );
-    const result = document.getElementById("foodResult");
+<style>
+*{box-sizing:border-box}
 
-    const foods = {
-
-        injera: {
-            name: "Injera",
-            serving: "1 medium piece (~100 g)",
-            calories: 170,
-            protein: 5,
-            carbs: 35,
-            fat: 1
-        },
-
-        misir: {
-            name: "Misir Wot",
-            serving: "1 cup (~200 g)",
-            calories: 280,
-            protein: 14,
-            carbs: 40,
-            fat: 7
-        },
-
-        shiro: {
-            name: "Shiro Wot",
-            serving: "1 cup (~200 g)",
-            calories: 300,
-            protein: 12,
-            carbs: 35,
-            fat: 12
-        },
-
-        tibs: {
-            name: "Tibs",
-            serving: "100 g",
-            calories: 250,
-            protein: 25,
-            carbs: 5,
-            fat: 14
-        },
-
-        egg: {
-            name: "Boiled Egg",
-            serving: "1 large egg (~50 g)",
-            calories: 72,
-            protein: 6.3,
-            carbs: 0.4,
-            fat: 4.8
-        },
-
-        yogurt: {
-            name: "Ergo / Plain Yogurt",
-            serving: "1 cup (~240 g)",
-            calories: 140,
-            protein: 8,
-            carbs: 11,
-            fat: 7
-        },
-
-        potato: {
-            name: "Boiled Potato",
-            serving: "1 medium (~150 g)",
-            calories: 130,
-            protein: 3,
-            carbs: 30,
-            fat: 0.2
-        },
-
-        oats: {
-            name: "Oats",
-            serving: "1/2 cup (~40 g)",
-            calories: 150,
-            protein: 5,
-            carbs: 27,
-            fat: 3
-        },
-
-        banana: {
-            name: "Banana",
-            serving: "1 medium banana",
-            calories: 105,
-            protein: 1.3,
-            carbs: 27,
-            fat: 0.4
-        },
-
-        avocado: {
-            name: "Avocado",
-            serving: "1/2 medium avocado",
-            calories: 160,
-            protein: 2,
-            carbs: 9,
-            fat: 15
-        },
-
-        orange: {
-            name: "Orange",
-            serving: "1 medium orange",
-            calories: 62,
-            protein: 1.2,
-            carbs: 15,
-            fat: 0.2
-        },
-
-        bread: {
-            name: "Bread",
-            serving: "1 slice",
-            calories: 80,
-            protein: 3,
-            carbs: 15,
-            fat: 1
-        },
-
-        kinche: {
-            name: "Kinche",
-            serving: "1 cup",
-            calories: 180,
-            protein: 5,
-            carbs: 32,
-            fat: 4
-        },
-
-        aja: {
-            name: "Aja",
-            serving: "1 cup",
-            calories: 180,
-            protein: 5,
-            carbs: 32,
-            fat: 4
-        },
-
-        nuts: {
-            name: "Mixed Nuts",
-            serving: "30 g",
-            calories: 170,
-            protein: 5,
-            carbs: 6,
-            fat: 15
-        }
-
-    };
-
-    if (!food || isNaN(servings) || servings <= 0) {
-
-        result.innerHTML =
-            "Please select a food and enter a valid number of servings.";
-
-        return;
-    }
-
-    const f = foods[food];
-
-    if (!f) {
-
-        result.innerHTML =
-            "Food information not found.";
-
-        return;
-    }
-
-    const calories = f.calories * servings;
-    const protein = f.protein * servings;
-    const carbs = f.carbs * servings;
-    const fat = f.fat * servings;
-
-    result.innerHTML = `
-        <h3>${f.name}</h3>
-
-        <p>
-            <strong>Serving:</strong>
-            ${f.serving}
-        </p>
-
-        <p>
-            <strong>Servings:</strong>
-            ${servings}
-        </p>
-
-        <p>
-            <strong>Calories:</strong>
-            ${calories.toFixed(0)} kcal
-        </p>
-
-        <p>
-            <strong>Protein:</strong>
-            ${protein.toFixed(1)} g
-        </p>
-
-        <p>
-            <strong>Carbohydrates:</strong>
-            ${carbs.toFixed(1)} g
-        </p>
-
-        <p>
-            <strong>Fat:</strong>
-            ${fat.toFixed(1)} g
-        </p>
-    `;
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f6f8;
+    color:#222;
 }
+
+header{
+    background:#174a5b;
+    color:white;
+    text-align:center;
+    padding:22px 12px;
+}
+
+header h1{
+    margin:0;
+    font-size:27px;
+}
+
+header p{
+    margin:7px 0 0;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:15px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    margin-bottom:18px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.card h2{
+    color:#174a5b;
+    margin-top:0;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-top:12px;
+    margin-bottom:6px;
+}
+
+input,select{
+    width:100%;
+    padding:11px;
+    border:1px solid #ccc;
+    border-radius:7px;
+    font-size:15px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:18px;
+    border:0;
+    border-radius:7px;
+    background:#174a5b;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.result{
+    margin-top:18px;
+    padding:15px;
+    background:#eef6f8;
+    border-radius:8px;
+    line-height:1.6;
+}
+
+.exercise{
+    background:white;
+    border-left:4px solid #174a5b;
+    padding:12px;
+    margin:8px 0;
+    border-radius:5px;
+}
+
+.warning{
+    background:#fff3cd;
+    padding:12px;
+    margin-top:12px;
+    border-radius:7px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🇪🇹 Ethiopian Calorie & Fitness Planner</h1>
+<p>Body Composition • Nutrition • Fitness • Training</p>
+</header>
+
+<div class="container">
+
+<!-- BODY COMPOSITION -->
+
+<div class="card">
+
+<h2>📊 Body Composition</h2>
+
+<label>Weight (kg)</label>
+<input type="number" id="weight">
+
+<label>Height (cm)</label>
+<input type="number" id="height">
+
+<button onclick="calculateBMI()">Calculate BMI</button>
+
+<div id="bmiResult" class="result"></div>
+
+</div>
+
+
+<!-- DAILY CALORIE REQUIREMENTS -->
+
+<div class="card">
+
+<h2>🔥 Daily Calorie Requirements</h2>
+
+<label>Goal</label>
+<select id="goal">
+<option value="weightLoss">Weight Loss / Fat Loss</option>
+<option value="maintenance">Weight Maintenance</option>
+<option value="muscleGain">Muscle Gain</option>
+<option value="strength">Strength & Performance</option>
+</select>
+
+<label>Current Level</label>
+<select id="level">
+<option value="beginner">Beginner</option>
+<option value="intermediate">Intermediate</option>
+<option value="advanced">Advanced</option>
+</select>
+
+<label>Training Type</label>
+<select id="type">
+<option value="strength">Strength</option>
+<option value="aerobic">Aerobic</option>
+<option value="core">Core</option>
+<option value="strengthAerobic">Strength + Aerobic</option>
+<option value="strengthCore">Strength + Core</option>
+<option value="aerobicCore">Aerobic + Core</option>
+</select>
+
+<label>Training Days Per Week</label>
+<select id="days">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+</select>
+
+<button onclick="createProgram()">Create Program</button>
+
+<div id="programResult" class="result"></div>
+
+</div>
+
+
+<!-- ADVANCED TRAINING PROGRAM -->
+
+<div class="card">
+
+<h2>🏋️ Advanced Training Program</h2>
+
+<label>Training Goal</label>
+<select id="trainingGoal">
+<option value="fatLoss">Fat Loss</option>
+<option value="muscleGain">Muscle Gain</option>
+<option value="strength">Strength</option>
+<option value="fitness">General Fitness</option>
+<option value="performance">Sports Performance</option>
+</select>
+
+<label>Current Level</label>
+<select id="trainingLevel">
+<option value="beginner">Beginner</option>
+<option value="intermediate">Intermediate</option>
+<option value="advanced">Advanced</option>
+</select>
+
+<label>Training Type</label>
+<select id="trainingType">
+<option value="strength">Strength</option>
+<option value="aerobic">Aerobic</option>
+<option value="core">Core</option>
+<option value="strengthAerobic">Strength + Aerobic</option>
+<option value="strengthCore">Strength + Core</option>
+<option value="aerobicCore">Aerobic + Core</option>
+</select>
+
+<label>Training Days Per Week</label>
+<select id="trainingDays">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+</select>
+
+<button onclick="createAdvancedProgram()">
+Create Training Program
+</button>
+
+<div id="advancedProgramResult" class="result"></div>
+
+</div>
+
+
+<!-- ETHIOPIAN FOOD NUTRITION DATABASE -->
+
+<div class="card">
+
+<h2>🍽️ Ethiopian Food Nutrition Database</h2>
+
+<label>Select Food</label>
+
+<select id="foodSelect">
+
+<option value="">-- Select Ethiopian Food --</option>
+
+<option value="injera">Injera</option>
+<option value="misir">Misir Wot</option>
+<option value="shiro">Shiro Wot</option>
+<option value="tibs">Tibs</option>
+<option value="egg">Boiled Egg</option>
+<option value="yogurt">Ergo / Plain Yogurt</option>
+<option value="potato">Boiled Potato</option>
+<option value="oats">Oats</option>
+<option value="banana">Banana</option>
+<option value="avocado">Avocado</option>
+<option value="orange">Orange</option>
+<option value="bread">Bread</option>
+<option value="kinche">Kinche</option>
+<option value="aja">Aja</option>
+<option value="nuts">Mixed Nuts</option>
+
+</select>
+
+<label>Number of Servings</label>
+
+<input
+type="number"
+id="foodServings"
+value="1"
+min="0.25"
+step="0.25"
+>
+
+<button onclick="calculateFoodNutrition()">
+Calculate Nutrition
+</button>
+
+<div id="foodResult" class="result"></div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+BODY COMPOSITION
+========================= */
+
+function calculateBMI(){
+
+const weight=parseFloat(
+document.getElementById("weight").value
+);
+
+const heightCm=parseFloat(
+document.getElementById("height").value
+);
+
+const result=document.getElementById("bmiResult");
+
+if(isNaN(weight)||isNaN(heightCm)||weight<=0||heightCm<=0){
+
+result.innerHTML="Please enter valid weight and height.";
+
+return;
+}
+
+const height=heightCm/100;
+
+const bmi=weight/(height*height);
+
+let category;
+
+if(bmi<18.5){
+
+category="Underweight";
+
+}else if(bmi<25){
+
+category="Normal Weight";
+
+}else if(bmi<30){
+
+category="Overweight";
+
+}else{
+
+category="Obesity";
+
+}
+
+result.innerHTML=`
+
+<h3>BMI Result</h3>
+
+<p><strong>BMI:</strong> ${bmi.toFixed(1)}</p>
+
+<p><strong>Category:</strong> ${category}</p>
+
+`;
+
+}
+
+
+/* =========================
+DAILY PROGRAM
+========================= */
+
+function createProgram(){
+
+const goal=document.getElementById("goal").value;
+const level=document.getElementById("level").value;
+const type=document.getElementById("type").value;
+const days=parseInt(document.getElementById("days").value);
+
+const result=document.getElementById("programResult");
+
+let html=`
+
+<h3>Training Program</h3>
+
+<p>
+<strong>Goal:</strong> ${goal}
+</p>
+
+<p>
+<strong>Level:</strong> ${level}
+</p>
+
+<p>
+<strong>Training Type:</strong> ${type}
+</p>
+
+<p>
+<strong>Training Days:</strong> ${days} days/week
+</p>
+
+<hr>
+
+`;
+
+if(type==="strength"){
+
+html+=strengthDayA(goal);
+
+}
+
+else if(type==="aerobic"){
+
+html+=advancedAerobic(1);
+
+}
+
+else if(type==="core"){
+
+html+=coreDay(1);
+
+}
+
+else if(type==="strengthAerobic"){
+
+html+=strengthDayA(goal);
+html+=advancedAerobic(1);
+
+}
+
+else if(type==="strengthCore"){
+
+html+=strengthDayA(goal);
+html+=coreDay(1);
+
+}
+
+else if(type==="aerobicCore"){
+
+html+=advancedAerobic(1);
+html+=coreDay(1);
+
+}
+
+html+=`
+
+<div class="warning">
+
+<strong>Training principle:</strong>
+Use proper technique, progress gradually,
+and allow adequate recovery.
+
+</div>
+
+`;
+
+result.innerHTML=html;
+
+}
+
+
+/* =========================
+STRENGTH DAY A
+========================= */
+
+function strengthDayA(goal){
+
+let reps="8–12";
+
+if(goal==="strength"){
+reps="4–8";
+}
+
+return`
+
+<h3>Strength Day A</h3>
+
+<div class="exercise">
+<strong>Squat</strong>
+3 sets × ${reps}
+</div>
+
+<div class="exercise">
+<strong>Push-Up / Bench Press</strong>
+3 sets × ${reps}
+</div>
+
+<div class="exercise">
+<strong>Row</strong>
+3 sets × ${reps}
+</div>
+
+<div class="exercise">
+<strong>Hip Hinge / Deadlift</strong>
+2–3 sets × ${reps}
+</div>
+
+`;
+
+}
+
+
+/* =========================
+STRENGTH DAY B
+========================= */
+
+function strengthDayB(goal){
+
+let reps="8–12";
+
+if(goal==="strength"){
+reps="4–8";
+}
+
+return`
+
+<h3>Strength Day B</h3>
+
+<div class="exercise">
+<strong>Reverse Lunge</strong>
+3 sets × ${reps}
+</div>
+
+<div class="exercise">
+<strong>Overhead Press</strong>
+3 sets × ${reps}
+</div>
+
+<div class="exercise">
+<strong>Lat Pulldown</strong>
+3 sets × ${reps}
+</div>
+
+<div class="exercise">
+<strong>Hip Thrust</strong>
+3 sets × ${reps}
+</div>
+
+`;
+
+}
+
+
+/* =========================
+CORE
+========================= */
+
+function coreDay(day){
+
+return`
+
+<h3>Core Training</h3>
+
+<div class="exercise">
+<strong>Plank</strong>
+3 sets × 30–60 seconds
+</div>
+
+<div class="exercise">
+<strong>Dead Bug</strong>
+3 sets × 8–12 reps
+</div>
+
+<div class="exercise">
+<strong>Bird Dog</strong>
+3 sets × 8–12 reps each side
+</div>
+
+<div class="exercise">
+<strong>Side Plank</strong>
+2–3 sets × 20–45 seconds
+</div>
+
+`;
+
+}
+
+
+/* =========================
+ADVANCED PROGRAM
+========================= */
+
+function createAdvancedProgram(){
+
+const goal=
+document.getElementById("trainingGoal").value;
+
+const level=
+document.getElementById("trainingLevel").value;
+
+const type=
+document.getElementById("trainingType").value;
+
+const days=
+parseInt(document.getElementById("trainingDays").value);
+
+const result=
+document.getElementById("advancedProgramResult");
+
+let html=`
+
+<h3>Advanced Training Program</h3>
+
+<p>
+<strong>Goal:</strong> ${goal}
+</p>
+
+<p>
+<strong>Level:</strong> ${level}
+</p>
+
+<p>
+<strong>Training Type:</strong> ${type}
+</p>
+
+<p>
+<strong>Training Days:</strong> ${days}/week
+</p>
+
+<hr>
+
+`;
+
+for(let day=1;day<=days;day++){
+
+html+=`
+
+<h3>Day ${day} — ${getDayName(type,day)}</h3>
+
+`;
+
+if(type==="strength"){
+
+if(day%2===1){
+
+html+=advancedStrengthA(goal,level);
+
+}else{
+
+html+=advancedStrengthB(goal,level);
+
+}
+
+}
+
+if(type==="aerobic")
