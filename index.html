@@ -3,620 +3,351 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ECFP - Ethiopian Calorie & Fitness Planner</title><style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background: #f4f6f8;
-    color: #222;
+body{
+font-family:Arial,sans-serif;
+margin:0;
+background:#f4f6f8;
+color:#222;
 }
-
-.container {
-    max-width: 600px;
-    margin: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+header{
+background:#1f4d3a;
+color:white;
+padding:20px;
+text-align:center;
 }
-
-h1 {
-    text-align: center;
-    margin-bottom: 5px;
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
 }
-
-.subtitle {
-    text-align: center;
-    color: #666;
-    margin-bottom: 25px;
+.card{
+background:white;
+padding:20px;
+margin:15px 0;
+border-radius:12px;
+box-shadow:0 2px 8px #0002;
 }
-
-h2 {
-    margin-top: 25px;
+h2{color:#1f4d3a;}
+label{
+display:block;
+font-weight:bold;
+margin-top:12px;
 }
-
-label {
-    display: block;
-    margin-top: 15px;
-    font-weight: bold;
+input,select{
+width:100%;
+padding:11px;
+margin-top:5px;
+border:1px solid #ccc;
+border-radius:7px;
+box-sizing:border-box;
 }
-
-input, select, button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 6px;
-    border: 1px solid #ccc;
-    border-radius: 7px;
-    box-sizing: border-box;
-    font-size: 16px;
+button{
+background:#1f4d3a;
+color:white;
+border:none;
+padding:12px 18px;
+border-radius:7px;
+margin-top:18px;
+font-weight:bold;
+cursor:pointer;
 }
-
-button {
-    margin-top: 25px;
-    background: #198754;
-    color: white;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
+.result{
+margin-top:15px;
+padding:15px;
+background:#eef6f1;
+border-radius:8px;
 }
-
-button:hover {
-    opacity: 0.9;
+.exercise{
+padding:12px;
+margin:8px 0;
+background:#f5f5f5;
+border-left:5px solid #1f4d3a;
+border-radius:6px;
 }
-
-.hidden {
-    display: none;
-}
-
-.result {
-    margin-top: 25px;
-    padding: 15px;
-    background: #eef7f0;
-    border-radius: 8px;
-}
-
-.result strong {
-    color: #146c43;
-}
-
-.note {
-    font-size: 14px;
-    color: #555;
-    margin-top: 15px;
-}
-
-.section {
-    margin-top: 35px;
-    padding-top: 10px;
-    border-top: 2px solid #ddd;
-}
-
-.exercise-card {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 12px;
-    margin-top: 10px;
-}
-
-.exercise-card h3 {
-    margin: 0 0 8px 0;
-}
-
-.exercise-card p {
-    margin: 5px 0;
-}
-</style></head><body><div class="container"><h1>🇪🇹 ECFP</h1><div class="subtitle">
-Ethiopian Calorie & Fitness Planner
-</div><!-- ========================= --><!-- BODY COMPOSITION MODULE --><!-- ========================= --><h2>Body Composition Assessment</h2><label>Sex</label>
-<select id="sex" onchange="showMethod()">
-<option value="">Select sex</option>
-<option value="male">Male</option>
-<option value="female">Female</option>
-</select>
-
-<label>Age (years)</label>
-<input type="number" id="age" placeholder="Example: 35">
+</style></head><body><header>
+<h1>ECFP</h1>
+<p>Ethiopian Calorie & Fitness Planner</p>
+</header><div class="container"><div class="card">
+<h2>1. Body Composition</h2><label>Weight (kg)</label>
+<input id="weight" type="number">
 
 <label>Height (cm)</label>
-<input type="number" id="height" placeholder="Example: 175">
+<input id="height" type="number">
 
-<label>Current Weight (kg)</label>
-<input type="number" id="weight" placeholder="Example: 80">
+<label>Age</label>
+<input id="age" type="number">
 
-<label>How do you know your body-fat percentage?</label>
-<select id="bfMethod" onchange="showMethod()">
-<option value="">Select method</option>
-<option value="measured">I have a measured body-fat %</option>
-<option value="estimate">Estimate from body measurements</option>
-</select>
+<label>Sex</label>
+<select id="sex">
 
-<div id="measuredBox" class="hidden"><label>Measured Body Fat (%)</label>
-<input type="number" id="bf" step="0.1" placeholder="Example: 25">
-
-</div><div id="estimateBox" class="hidden"><p class="note">
-Enter circumference measurements in centimeters. Measure against the skin without compressing the tape.
-</p><label>Waist Circumference (cm)</label>
-<input type="number" id="waist" placeholder="Example: 95">
-
-<label>Neck Circumference (cm)</label>
-<input type="number" id="neck" placeholder="Example: 40">
-
-<div id="hipBox" class="hidden"><label>Hip Circumference (cm)</label>
-<input type="number" id="hip" placeholder="Example: 105">
-
-</div></div><button onclick="calculateBodyComposition()">
-Calculate Body Composition
-</button><div id="result" class="result hidden"></div><!-- ========================= --><!-- CALORIE REQUIREMENT MODULE --><!-- ========================= --><div class="section"><h2>Daily Calorie Requirement</h2><label>Sex</label>
-<select id="calSex">
-<option value="">Select sex</option>
 <option value="male">Male</option>
 <option value="female">Female</option>
-</select>
+</select><button onclick="calculateBMI()">Calculate</button>
 
-<label>Age (years)</label>
-<input type="number" id="calAge" placeholder="Example: 35">
-
-<label>Height (cm)</label>
-<input type="number" id="calHeight" placeholder="Example: 175">
-
-<label>Weight (kg)</label>
-<input type="number" id="calWeight" placeholder="Example: 80">
-
-<label>Activity Level</label>
+<div id="bmiResult" class="result"></div>
+</div><div class="card">
+<h2>2. Daily Calorie Requirements</h2><label>Activity Level</label>
 <select id="activity">
-<option value="">Select activity level</option>
-<option value="1.2">Sedentary - little or no exercise</option>
-<option value="1.375">Lightly Active - exercise 1–3 days/week</option>
-<option value="1.55">Moderately Active - exercise 3–5 days/week</option>
-<option value="1.725">Very Active - exercise 6–7 days/week</option>
-<option value="1.9">Extremely Active - hard training/physical job</option>
-</select>
 
-<label>Goal</label>
+<option value="1.2">Sedentary – little exercise</option>
+<option value="1.375">Light – 1–3 days/week</option>
+<option value="1.55">Moderate – 3–5 days/week</option>
+<option value="1.725">High – 6–7 days/week</option>
+<option value="1.9">Very High – hard training/athlete</option>
+</select><button onclick="calculateCalories()">Calculate Daily Calories</button>
+
+<div id="calorieResult" class="result"></div>
+</div><div class="card">
+<h2>3. Training Program Planner</h2><label>Training Goal</label>
 <select id="goal">
-<option value="">Select goal</option>
-<option value="loss">Fat Loss</option>
-<option value="maintenance">Weight Maintenance</option>
-<option value="gain">Muscle / Weight Gain</option>
-</select>
 
-<button onclick="calculateCalories()">
-Calculate Daily Calories
-</button><div id="calorieResult" class="result hidden"></div></div><!-- ========================= --><!-- EXERCISE PROGRAM MODULE --><!-- ========================= --><div class="section"><h2>Exercise Program Planner</h2><label>Training Goal</label>
-<select id="trainingGoal">
-<option value="">Select training goal</option>
-<option value="fatloss">Fat Loss & Fitness</option>
+<option value="strength">Strength</option>
 <option value="muscle">Muscle Building</option>
-<option value="strength">Strength Development</option>
-<option value="general">General Fitness</option>
-</select>
+<option value="fatloss">Fat Loss</option>
+<option value="fitness">General Fitness</option>
+<option value="performance">Sports Performance</option>
+</select><label>Current Level</label>
+<select id="level">
 
-<label>Client Level</label>
-<select id="clientLevel">
-<option value="">Select client level</option>
 <option value="beginner">Beginner</option>
 <option value="intermediate">Intermediate</option>
 <option value="advanced">Advanced</option>
-</select>
+</select><label>Primary Training Type</label>
+<select id="type">
 
-<label>Training Type</label>
-<select id="trainingType">
-<option value="">Select training type</option>
-<option value="strength">Strength Training</option>
-<option value="aerobic">Aerobic Training</option>
-<option value="core">Core Training</option>
-<option value="flexibility">Flexibility / Mobility</option>
-</select>
+<option value="strength">Strength</option>
+<option value="aerobic">Aerobic</option>
+<option value="core">Core</option>
+<option value="mobility">Mobility</option>
+</select><label>Secondary Training Type</label>
+<select id="secondary">
 
-<label>Training Days per Week</label>
-<select id="trainingDays">
-<option value="">Select days</option>
-<option value="2">2 days/week</option>
-<option value="3">3 days/week</option>
-<option value="4">4 days/week</option>
-<option value="5">5 days/week</option>
-<option value="6">6 days/week</option>
-</select>
+<option value="none">None</option>
+<option value="strength">Strength</option>
+<option value="aerobic">Aerobic</option>
+<option value="core">Core</option>
+<option value="mobility">Mobility</option>
+</select><label>Training Days per Week</label>
+<select id="days">
 
-<button onclick="generateExerciseProgram()">
-Generate Exercise Program
-</button><div id="exerciseResult" class="result hidden"></div></div></div><script>
+<option value="2">2 days</option>
+<option value="3">3 days</option>
+<option value="4">4 days</option>
+<option value="5">5 days</option>
+<option value="6">6 days</option>
+</select><button onclick="generateProgram()">Generate Training Program</button>
 
-/* =========================
-   BODY COMPOSITION
-   ========================= */
+<div id="programResult" class="result"></div>
+</div></div><script>
 
-function showMethod() {
+function calculateBMI(){
 
-    const method = document.getElementById("bfMethod").value;
-    const sex = document.getElementById("sex").value;
+let w=parseFloat(document.getElementById("weight").value);
+let h=parseFloat(document.getElementById("height").value);
 
-    document.getElementById("measuredBox").classList.add("hidden");
-    document.getElementById("estimateBox").classList.add("hidden");
-    document.getElementById("hipBox").classList.add("hidden");
+if(!w || !h){
+document.getElementById("bmiResult").innerHTML=
+"Please enter weight and height.";
+return;
+}
 
-    if (method === "measured") {
-        document.getElementById("measuredBox").classList.remove("hidden");
-    }
+let bmi=w/Math.pow(h/100,2);
+let category="";
 
-    if (method === "estimate") {
+if(bmi<18.5) category="Underweight";
+else if(bmi<25) category="Normal weight";
+else if(bmi<30) category="Overweight";
+else category="Obesity";
 
-        document.getElementById("estimateBox").classList.remove("hidden");
-
-        if (sex === "female") {
-            document.getElementById("hipBox").classList.remove("hidden");
-        }
-    }
+document.getElementById("bmiResult").innerHTML=
+"<b>BMI:</b> "+bmi.toFixed(1)+
+"<br><b>Classification:</b> "+category;
 }
 
 
-function calculateBodyComposition() {
+function calculateCalories(){
 
-    const sex = document.getElementById("sex").value;
-    const age = parseFloat(document.getElementById("age").value);
-    const height = parseFloat(document.getElementById("height").value);
-    const weight = parseFloat(document.getElementById("weight").value);
-    const method = document.getElementById("bfMethod").value;
+let w=parseFloat(document.getElementById("weight").value);
+let h=parseFloat(document.getElementById("height").value);
+let age=parseFloat(document.getElementById("age").value);
+let sex=document.getElementById("sex").value;
+let activity=parseFloat(document.getElementById("activity").value);
 
-    if (!sex || !age || !height || !weight || !method) {
-        alert("Please complete all required information.");
-        return;
-    }
+if(!w || !h || !age){
+document.getElementById("calorieResult").innerHTML=
+"Please enter weight, height and age first.";
+return;
+}
 
-    let bf;
+let bmr;
 
-    if (method === "measured") {
+if(sex==="male"){
+bmr=(10*w)+(6.25*h)-(5*age)+5;
+}else{
+bmr=(10*w)+(6.25*h)-(5*age)-161;
+}
 
-        bf = parseFloat(document.getElementById("bf").value);
+let calories=bmr*activity;
 
-        if (!bf || bf <= 0 || bf >= 60) {
-            alert("Please enter a valid body-fat percentage.");
-            return;
-        }
-
-    } else {
-
-        const waist = parseFloat(document.getElementById("waist").value);
-        const neck = parseFloat(document.getElementById("neck").value);
-
-        if (!waist || !neck) {
-            alert("Please enter waist and neck circumference.");
-            return;
-        }
-
-        const h = height / 2.54;
-        const w = waist / 2.54;
-        const n = neck / 2.54;
-
-        if (sex === "male") {
-
-            if (w <= n) {
-                alert("Waist circumference must be greater than neck circumference.");
-                return;
-            }
-
-            bf = 86.010 * Math.log10(w - n)
-                 - 70.041 * Math.log10(h)
-                 + 36.76;
-
-        } else {
-
-            const hip = parseFloat(document.getElementById("hip").value);
-
-            if (!hip) {
-                alert("Please enter hip circumference.");
-                return;
-            }
-
-            if (w + (hip / 2.54) <= n) {
-                alert("Please check your circumference measurements.");
-                return;
-            }
-
-            const hp = hip / 2.54;
-
-            bf = 163.205 * Math.log10(w + hp - n)
-                 - 97.684 * Math.log10(h)
-                 - 78.387;
-        }
-    }
-
-    const targetBF = sex === "male" ? 17 : 24;
-
-    const fatMass = weight * (bf / 100);
-    const fatFreeMass = weight - fatMass;
-
-    const targetWeight =
-        fatFreeMass / (1 - targetBF / 100);
-
-    const expectedReduction =
-        weight - targetWeight;
-
-    let status = "";
-
-    if (expectedReduction > 0) {
-        status = "Estimated weight reduction";
-    } else {
-        status = "No weight reduction required based on this target.";
-    }
-
-    document.getElementById("result").classList.remove("hidden");
-
-    document.getElementById("result").innerHTML = `
-
-        <h2>Body Composition Result</h2>
-
-        <p><strong>Estimated Body Fat:</strong>
-        ${bf.toFixed(1)}%</p>
-
-        <p><strong>Fat Mass:</strong>
-        ${fatMass.toFixed(1)} kg</p>
-
-        <p><strong>Fat-Free Mass:</strong>
-        ${fatFreeMass.toFixed(1)} kg</p>
-
-        <p><strong>Reference Target Body Fat:</strong>
-        ${targetBF}%</p>
-
-        <p><strong>Estimated Target Weight:</strong>
-        ${targetWeight.toFixed(1)} kg</p>
-
-        <p><strong>${status}:</strong>
-        ${Math.max(expectedReduction, 0).toFixed(1)} kg</p>
-
-        <p class="note">
-        This estimate assumes fat-free mass is maintained.
-        Actual changes may differ, especially when resistance training
-        increases or preserves muscle mass.
-        </p>
-
-    `;
+document.getElementById("calorieResult").innerHTML=
+"<b>BMR:</b> "+Math.round(bmr)+
+" kcal/day<br><b>Estimated daily requirement:</b> "+
+Math.round(calories)+" kcal/day";
 }
 
 
-/* =========================
-   DAILY CALORIE CALCULATOR
-   ========================= */
+function generateProgram(){
 
-function calculateCalories() {
+let goal=document.getElementById("goal").value;
+let level=document.getElementById("level").value;
+let type=document.getElementById("type").value;
+let secondary=document.getElementById("secondary").value;
+let days=parseInt(document.getElementById("days").value);
 
-    const sex = document.getElementById("calSex").value;
-    const age = parseFloat(document.getElementById("calAge").value);
-    const height = parseFloat(document.getElementById("calHeight").value);
-    const weight = parseFloat(document.getElementById("calWeight").value);
-    const activity = parseFloat(document.getElementById("activity").value);
-    const goal = document.getElementById("goal").value;
+let exercises=[];
+let sets=2;
+let reps="8–12";
+let intensity="RPE 6–8";
+let rest="60–120 seconds";
 
-    if (!sex || !age || !height || !weight || !activity || !goal) {
-        alert("Please complete all calorie requirement information.");
-        return;
-    }
+if(level==="beginner"){
+sets=2;
+intensity="RPE 6–7";
+rest="60–90 seconds";
+}
 
-    let bmr;
+if(level==="intermediate"){
+sets=3;
+intensity="RPE 7–8";
+rest="90–120 seconds";
+}
 
-    if (sex === "male") {
+if(level==="advanced"){
+sets=3;
+intensity="RPE 8–9";
+rest="120–180 seconds";
+}
 
-        bmr = (10 * weight)
-            + (6.25 * height)
-            - (5 * age)
-            + 5;
+if(goal==="strength"){
+reps="4–8";
+}
 
-    } else {
+if(goal==="fatloss"){
+reps="8–15";
+}
 
-        bmr = (10 * weight)
-            + (6.25 * height)
-            - (5 * age)
-            - 161;
-    }
-
-    const tdee = bmr * activity;
-
-    let calorieTarget;
-
-    if (goal === "loss") {
-
-        calorieTarget = tdee - 500;
-
-    } else if (goal === "gain") {
-
-        calorieTarget = tdee + 300;
-
-    } else {
-
-        calorieTarget = tdee;
-    }
-
-    document.getElementById("calorieResult").classList.remove("hidden");
-
-    document.getElementById("calorieResult").innerHTML = `
-
-        <h2>Daily Calorie Result</h2>
-
-        <p><strong>Estimated BMR:</strong>
-        ${Math.round(bmr)} kcal/day</p>
-
-        <p><strong>Estimated Daily Energy Requirement:</strong>
-        ${Math.round(tdee)} kcal/day</p>
-
-        <p><strong>Recommended Calories for Your Goal:</strong>
-        ${Math.round(calorieTarget)} kcal/day</p>
-
-        <p class="note">
-        This is an estimated starting point. Actual calorie needs
-        can vary according to body composition, training load,
-        occupation, lifestyle and changes in body weight.
-        Adjust based on progress over time.
-        </p>
-
-    `;
+if(goal==="muscle"){
+reps="8–12";
 }
 
 
-/* =========================
-   EXERCISE PROGRAM GENERATOR
-   ========================= */
+if(type==="strength"){
 
-function generateExerciseProgram() {
+exercises=[
+"Squat – "+sets+" sets × "+reps,
+"Push-up / Bench Press – "+sets+" sets × "+reps,
+"Row – "+sets+" sets × "+reps,
+"Romanian Deadlift – "+sets+" sets × "+reps,
+"Overhead Press – "+sets+" sets × "+reps
+];
 
-    const goal = document.getElementById("trainingGoal").value;
-    const level = document.getElementById("clientLevel").value;
-    const type = document.getElementById("trainingType").value;
-    const days = parseInt(document.getElementById("trainingDays").value);
+}
 
-    if (!goal || !level || !type || !days) {
-        alert("Please complete all exercise program information.");
-        return;
-    }
 
-    let sets;
-    let reps;
-    let intensity;
-    let rest;
+if(type==="aerobic"){
 
-    if (level === "beginner") {
-        sets = 2;
-    } else {
-        sets = 3;
-    }
+exercises=[
+"Brisk Walking – 20–30 minutes",
+"Jogging – 15–25 minutes",
+"Cycling – 20–30 minutes",
+"Football / Soccer – 30–60 minutes"
+];
 
-    if (goal === "strength") {
-        reps = "4–6";
-        intensity = "75–85% 1RM";
-        rest = "2–3 minutes";
-    }
+}
 
-    else if (goal === "muscle") {
-        reps = "8–12";
-        intensity = "65–80% 1RM";
-        rest = "60–120 seconds";
-    }
 
-    else if (goal === "fatloss") {
-        reps = "10–15";
-        intensity = "Moderate";
-        rest = "45–90 seconds";
-    }
+if(type==="core"){
 
-    else {
-        reps = "8–15";
-        intensity = "Moderate";
-        rest = "60–90 seconds";
-    }
+exercises=[
+"Plank – 2–3 × 20–45 sec",
+"Dead Bug – 2–3 × 8–12",
+"Bird Dog – 2–3 × 8–12",
+"Side Plank – 2–3 × 20–40 sec"
+];
 
-    let exercises = [];
+}
 
-    if (type === "strength") {
 
-        exercises = [
-            "Squat",
-            "Push-Up / Bench Press",
-            "Row",
-            "Hip Hinge / Romanian Deadlift",
-            "Shoulder Press",
-            "Core Plank"
-        ];
+if(type==="mobility"){
 
-    } else if (type === "aerobic") {
+exercises=[
+"Shoulder Mobility – 2 × 10",
+"Hip Mobility – 2 × 10",
+"Thoracic Rotation – 2 × 10",
+"Ankle Mobility – 2 × 10"
+];
 
-        exercises = [
-            "Brisk Walking",
-            "Jogging",
-            "Cycling",
-            "Step-Up",
-            "Aerobic Exercise"
-        ];
+}
 
-        reps = "20–40 minutes";
-        intensity = goal === "fatloss"
-            ? "Moderate intensity"
-            : "Moderate to vigorous intensity";
-        rest = "As needed";
 
-    } else if (type === "core") {
+if(secondary!=="none"){
 
-        exercises = [
-            "Plank",
-            "Side Plank",
-            "Dead Bug",
-            "Bird Dog",
-            "Glute Bridge"
-        ];
+if(secondary==="core"){
+exercises.push(
+"Core: Plank – 2 × 20–45 sec",
+"Core: Dead Bug – 2 × 8–12"
+);
+}
 
-        reps = "8–15 reps or 20–40 sec";
-        intensity = "Controlled";
-        rest = "30–60 seconds";
+if(secondary==="aerobic"){
+exercises.push(
+"Aerobic: Brisk Walking/Jogging – 15–30 min"
+);
+}
 
-    } else {
+if(secondary==="strength"){
+exercises.push(
+"Strength: Squat – 2 × 8–12",
+"Strength: Push-up – 2 × 8–12",
+"Strength: Row – 2 × 8–12"
+);
+}
 
-        exercises = [
-            "Hamstring Stretch",
-            "Hip Flexor Stretch",
-            "Chest Stretch",
-            "Shoulder Mobility",
-            "Thoracic Rotation"
-        ];
+if(secondary==="mobility"){
+exercises.push(
+"Mobility: Hip + Shoulder mobility – 5–10 min"
+);
+}
 
-        sets = 2;
-        reps = "20–40 seconds";
-        intensity = "Comfortable stretch";
-        rest = "20–30 seconds";
+}
 
-    }
 
-    let html = `
-        <h2>Recommended Exercise Program</h2>
+let schedule="";
 
-        <p><strong>Goal:</strong> ${document.getElementById("trainingGoal").selectedOptions[0].text}</p>
+for(let i=1;i<=days;i++){
 
-        <p><strong>Level:</strong> ${document.getElementById("clientLevel").selectedOptions[0].text}</p>
+let dayExercise=exercises[(i-1)%exercises.length];
 
-        <p><strong>Training Days:</strong> ${days} days/week</p>
+schedule+=
+"<div class='exercise'><b>Day "+i+
+"</b><br>"+dayExercise+"</div>";
+}
 
-        <p><strong>Sets:</strong> ${sets}</p>
 
-        <p><strong>Reps / Duration:</strong> ${reps}</p>
+document.getElementById("programResult").innerHTML=
 
-        <p><strong>Intensity:</strong> ${intensity}</p>
+"<b>Goal:</b> "+goal+
+"<br><b>Level:</b> "+level+
+"<br><b>Training combination:</b> "+type+
+(secondary!=="none" ? " + "+secondary : "")+
+"<br><b>Intensity:</b> "+intensity+
+"<br><b>Rest:</b> "+rest+
+"<br><br><b>Weekly Program:</b>"+
+schedule+
+"<br><b>Progressive Overload:</b> When all prescribed reps are completed with good technique, gradually increase resistance, repetitions, or training difficulty."+
+"<br><br><b>Warm-up:</b> 5–10 minutes"+
+"<br><b>Cool-down:</b> 5–10 minutes";
 
-        <p><strong>Rest:</strong> ${rest}</p>
-
-        <hr>
-    `;
-
-    exercises.forEach((exercise, index) => {
-
-        html += `
-            <div class="exercise-card">
-
-                <h3>${index + 1}. ${exercise}</h3>
-
-                <p><strong>Sets:</strong> ${sets}</p>
-
-                <p><strong>Reps / Duration:</strong> ${reps}</p>
-
-                <p><strong>Intensity:</strong> ${intensity}</p>
-
-                <p><strong>Rest:</strong> ${rest}</p>
-
-            </div>
-        `;
-
-    });
-
-    html += `
-        <p class="note">
-        Start with good technique and controlled movement.
-        Progress gradually by increasing repetitions, resistance,
-        or training volume when the current workload becomes manageable.
-        Stop or modify exercise if pain, dizziness, chest discomfort,
-        or unusual shortness of breath occurs.
-        </p>
-    `;
-
-    document.getElementById("exerciseResult").classList.remove("hidden");
-
-    document.getElementById("exerciseResult").innerHTML = html;
 }
 
 </script></body>
