@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ECFP - Body Composition Calculator</title>
+<title>ECFP - Ethiopian Calorie & Fitness Planner</title>
 
 <style>
 body {
@@ -87,6 +87,12 @@ button:hover {
     color: #555;
     margin-top: 15px;
 }
+
+.section {
+    margin-top: 35px;
+    padding-top: 10px;
+    border-top: 2px solid #ddd;
+}
 </style>
 </head>
 
@@ -100,10 +106,15 @@ button:hover {
 Ethiopian Calorie & Fitness Planner
 </div>
 
+
+<!-- ========================= -->
+<!-- BODY COMPOSITION MODULE -->
+<!-- ========================= -->
+
 <h2>Body Composition Assessment</h2>
 
 <label>Sex</label>
-<select id="sex">
+<select id="sex" onchange="showMethod()">
     <option value="">Select sex</option>
     <option value="male">Male</option>
     <option value="female">Female</option>
@@ -153,13 +164,71 @@ Enter circumference measurements in centimeters. Measure against the skin withou
 
 </div>
 
-<button onclick="calculate()">Calculate Body Composition</button>
+<button onclick="calculateBodyComposition()">
+Calculate Body Composition
+</button>
 
 <div id="result" class="result hidden"></div>
 
+
+<!-- ========================= -->
+<!-- CALORIE REQUIREMENT MODULE -->
+<!-- ========================= -->
+
+<div class="section">
+
+<h2>Daily Calorie Requirement</h2>
+
+<label>Sex</label>
+<select id="calSex">
+    <option value="">Select sex</option>
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+</select>
+
+<label>Age (years)</label>
+<input type="number" id="calAge" placeholder="Example: 35">
+
+<label>Height (cm)</label>
+<input type="number" id="calHeight" placeholder="Example: 175">
+
+<label>Weight (kg)</label>
+<input type="number" id="calWeight" placeholder="Example: 80">
+
+<label>Activity Level</label>
+<select id="activity">
+    <option value="">Select activity level</option>
+    <option value="1.2">Sedentary - little or no exercise</option>
+    <option value="1.375">Lightly Active - exercise 1–3 days/week</option>
+    <option value="1.55">Moderately Active - exercise 3–5 days/week</option>
+    <option value="1.725">Very Active - exercise 6–7 days/week</option>
+    <option value="1.9">Extremely Active - hard training/physical job</option>
+</select>
+
+<label>Goal</label>
+<select id="goal">
+    <option value="">Select goal</option>
+    <option value="loss">Fat Loss</option>
+    <option value="maintenance">Weight Maintenance</option>
+    <option value="gain">Muscle / Weight Gain</option>
+</select>
+
+<button onclick="calculateCalories()">
+Calculate Daily Calories
+</button>
+
+<div id="calorieResult" class="result hidden"></div>
+
 </div>
 
+</div>
+
+
 <script>
+
+/* =========================
+   BODY COMPOSITION
+   ========================= */
 
 function showMethod() {
 
@@ -175,6 +244,7 @@ function showMethod() {
     }
 
     if (method === "estimate") {
+
         document.getElementById("estimateBox").classList.remove("hidden");
 
         if (sex === "female") {
@@ -183,7 +253,8 @@ function showMethod() {
     }
 }
 
-function calculate() {
+
+function calculateBodyComposition() {
 
     const sex = document.getElementById("sex").value;
     const age = parseFloat(document.getElementById("age").value);
@@ -217,16 +288,16 @@ function calculate() {
             return;
         }
 
+        const h = height / 2.54;
+        const w = waist / 2.54;
+        const n = neck / 2.54;
+
         if (sex === "male") {
 
-            /*
-            U.S. Navy circumference equation
-            Uses inches internally.
-            */
-
-            const h = height / 2.54;
-            const w = waist / 2.54;
-            const n = neck / 2.54;
+            if (w <= n) {
+                alert("Waist circumference must be greater than neck circumference.");
+                return;
+            }
 
             bf = 86.010 * Math.log10(w - n)
                  - 70.041 * Math.log10(h)
@@ -241,9 +312,11 @@ function calculate() {
                 return;
             }
 
-            const h = height / 2.54;
-            const w = waist / 2.54;
-            const n = neck / 2.54;
+            if (w + (hip / 2.54) <= n) {
+                alert("Please check your circumference measurements.");
+                return;
+            }
+
             const hp = hip / 2.54;
 
             bf = 163.205 * Math.log10(w + hp - n)
@@ -251,13 +324,6 @@ function calculate() {
                  - 78.387;
         }
     }
-
-    /*
-    ECFP reference target.
-    For this first version:
-    Male = 17%
-    Female = 24%
-    */
 
     const targetBF = sex === "male" ? 17 : 24;
 
@@ -306,6 +372,88 @@ function calculate() {
         This estimate assumes fat-free mass is maintained.
         Actual changes may differ, especially when resistance training
         increases or preserves muscle mass.
+        </p>
+
+    `;
+}
+
+
+/* =========================
+   DAILY CALORIE CALCULATOR
+   ========================= */
+
+function calculateCalories() {
+
+    const sex = document.getElementById("calSex").value;
+    const age = parseFloat(document.getElementById("calAge").value);
+    const height = parseFloat(document.getElementById("calHeight").value);
+    const weight = parseFloat(document.getElementById("calWeight").value);
+    const activity = parseFloat(document.getElementById("activity").value);
+    const goal = document.getElementById("goal").value;
+
+    if (!sex || !age || !height || !weight || !activity || !goal) {
+        alert("Please complete all calorie requirement information.");
+        return;
+    }
+
+    let bmr;
+
+    /*
+    Mifflin-St Jeor equation
+    */
+
+    if (sex === "male") {
+
+        bmr = (10 * weight)
+            + (6.25 * height)
+            - (5 * age)
+            + 5;
+
+    } else {
+
+        bmr = (10 * weight)
+            + (6.25 * height)
+            - (5 * age)
+            - 161;
+    }
+
+    const tdee = bmr * activity;
+
+    let calorieTarget;
+
+    if (goal === "loss") {
+
+        calorieTarget = tdee - 500;
+
+    } else if (goal === "gain") {
+
+        calorieTarget = tdee + 300;
+
+    } else {
+
+        calorieTarget = tdee;
+    }
+
+    document.getElementById("calorieResult").classList.remove("hidden");
+
+    document.getElementById("calorieResult").innerHTML = `
+
+        <h2>Daily Calorie Result</h2>
+
+        <p><strong>Estimated BMR:</strong>
+        ${Math.round(bmr)} kcal/day</p>
+
+        <p><strong>Estimated Daily Energy Requirement:</strong>
+        ${Math.round(tdee)} kcal/day</p>
+
+        <p><strong>Recommended Calories for Your Goal:</strong>
+        ${Math.round(calorieTarget)} kcal/day</p>
+
+        <p class="note">
+        This is an estimated starting point. Actual calorie needs
+        can vary according to body composition, training load,
+        occupation, lifestyle and changes in body weight.
+        Adjust based on progress over time.
         </p>
 
     `;
