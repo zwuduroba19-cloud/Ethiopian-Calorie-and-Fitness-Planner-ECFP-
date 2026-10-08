@@ -12,17 +12,20 @@ margin:0;
 background:#f4f6f8;
 color:#222;
 }
+
 header{
 background:#1f4d3a;
 color:white;
 padding:20px;
 text-align:center;
 }
+
 .container{
 max-width:950px;
 margin:auto;
 padding:20px;
 }
+
 .card{
 background:white;
 padding:20px;
@@ -30,12 +33,17 @@ margin:15px 0;
 border-radius:12px;
 box-shadow:0 2px 8px #0002;
 }
-h2{color:#1f4d3a;}
+
+h2{
+color:#1f4d3a;
+}
+
 label{
 display:block;
 font-weight:bold;
 margin-top:12px;
 }
+
 input,select{
 width:100%;
 padding:11px;
@@ -44,6 +52,7 @@ border:1px solid #ccc;
 border-radius:7px;
 box-sizing:border-box;
 }
+
 button{
 background:#1f4d3a;
 color:white;
@@ -54,26 +63,29 @@ margin-top:18px;
 font-weight:bold;
 cursor:pointer;
 }
-button:hover{opacity:.9;}
+
 .result{
 margin-top:15px;
 padding:15px;
 background:#eef6f1;
 border-radius:8px;
 }
-.exercise{
-padding:12px;
-margin:8px 0;
-background:#f5f5f5;
-border-left:5px solid #1f4d3a;
-border-radius:6px;
-}
+
 .day{
 margin-top:15px;
 padding:15px;
 background:#eaf3ee;
 border-radius:8px;
 }
+
+.exercise{
+padding:12px;
+margin:8px 0;
+background:#fff;
+border-left:5px solid #1f4d3a;
+border-radius:6px;
+}
+
 .note{
 font-size:14px;
 color:#555;
@@ -92,17 +104,19 @@ margin-top:8px;
 <div class="container">
 
 <!-- BODY COMPOSITION -->
+
 <div class="card">
+
 <h2>1. Body Composition</h2>
 
 <label>Weight (kg)</label>
-<input id="weight" type="number" placeholder="Example: 60">
+<input id="weight" type="number">
 
 <label>Height (cm)</label>
-<input id="height" type="number" placeholder="Example: 165">
+<input id="height" type="number">
 
 <label>Age</label>
-<input id="age" type="number" placeholder="Example: 33">
+<input id="age" type="number">
 
 <label>Sex</label>
 <select id="sex">
@@ -113,497 +127,19 @@ margin-top:8px;
 <button onclick="calculateBMI()">Calculate</button>
 
 <div id="bmiResult" class="result"></div>
+
 </div>
 
 
-<!-- DAILY CALORIE -->
+<!-- CALORIES -->
+
 <div class="card">
+
 <h2>2. Daily Calorie Requirements</h2>
 
 <label>Activity Level</label>
+
 <select id="activity">
-<option value="1.2">Sedentary – little exercise</option>
-<option value="1.375">Light – 1–3 days/week</option>
-<option value="1.55">Moderate – 3–5 days/week</option>
-<option value="1.725">High – 6–7 days/week</option>
-<option value="1.9">Very High – hard training/athlete</option>
-</select>
 
-<button onclick="calculateCalories()">Calculate Daily Calories</button>
-
-<div id="calorieResult" class="result"></div>
-</div>
-
-
-<!-- TRAINING PROGRAM -->
-<div class="card">
-
-<h2>3. Training Program Planner</h2>
-
-<label>Training Goal</label>
-<select id="goal">
-<option value="strength">Strength</option>
-<option value="muscle">Muscle Building</option>
-<option value="fatloss">Fat Loss</option>
-<option value="fitness">General Fitness</option>
-<option value="performance">Sports Performance</option>
-</select>
-
-
-<label>Current Level</label>
-<select id="level">
-<option value="beginner">Beginner</option>
-<option value="intermediate">Intermediate</option>
-<option value="advanced">Advanced</option>
-</select>
-
-
-<label>Training Combination</label>
-<select id="combination">
-
-<option value="strength">
-Strength Only
-</option>
-
-<option value="strength_aerobic">
-Strength + Aerobic
-</option>
-
-<option value="strength_core">
-Strength + Core
-</option>
-
-<option value="aerobic_core">
-Aerobic + Core
-</option>
-
-<option value="strength_mobility">
-Strength + Mobility
-</option>
-
-<option value="strength_aerobic_core">
-Strength + Aerobic + Core
-</option>
-
-</select>
-
-<div class="note">
-Choose the combination that best matches the client's main training needs.
-</div>
-
-
-<label>Training Days per Week</label>
-<select id="days">
-<option value="2">2 days</option>
-<option value="3">3 days</option>
-<option value="4">4 days</option>
-<option value="5">5 days</option>
-<option value="6">6 days</option>
-</select>
-
-
-<button onclick="generateProgram()">
-Generate Training Program
-</button>
-
-<div id="programResult" class="result"></div>
-
-</div>
-
-</div>
-
-
-<script>
-
-/* BODY COMPOSITION */
-
-function calculateBMI(){
-
-let w=parseFloat(document.getElementById("weight").value);
-let h=parseFloat(document.getElementById("height").value);
-
-if(!w || !h){
-document.getElementById("bmiResult").innerHTML=
-"Please enter weight and height.";
-return;
-}
-
-let bmi=w/Math.pow(h/100,2);
-
-let category="";
-
-if(bmi<18.5){
-category="Underweight";
-}
-else if(bmi<25){
-category="Normal weight";
-}
-else if(bmi<30){
-category="Overweight";
-}
-else{
-category="Obesity";
-}
-
-document.getElementById("bmiResult").innerHTML=
-"<b>BMI:</b> "+bmi.toFixed(1)+
-"<br><b>Classification:</b> "+category;
-}
-
-
-/* DAILY CALORIES */
-
-function calculateCalories(){
-
-let w=parseFloat(document.getElementById("weight").value);
-let h=parseFloat(document.getElementById("height").value);
-let age=parseFloat(document.getElementById("age").value);
-let sex=document.getElementById("sex").value;
-let activity=parseFloat(document.getElementById("activity").value);
-
-if(!w || !h || !age){
-
-document.getElementById("calorieResult").innerHTML=
-"Please enter weight, height and age first.";
-
-return;
-}
-
-let bmr;
-
-if(sex==="male"){
-
-bmr=(10*w)+(6.25*h)-(5*age)+5;
-
-}
-else{
-
-bmr=(10*w)+(6.25*h)-(5*age)-161;
-
-}
-
-let calories=bmr*activity;
-
-document.getElementById("calorieResult").innerHTML=
-
-"<b>BMR:</b> "+
-Math.round(bmr)+
-" kcal/day<br>"+
-
-"<b>Estimated daily requirement:</b> "+
-Math.round(calories)+
-" kcal/day";
-
-}
-
-
-/* TRAINING PROGRAM */
-
-function generateProgram(){
-
-let goal=document.getElementById("goal").value;
-
-let level=document.getElementById("level").value;
-
-let combination=
-document.getElementById("combination").value;
-
-let days=
-parseInt(document.getElementById("days").value);
-
-
-/* LEVEL SETTINGS */
-
-let sets=2;
-let intensity="RPE 6–7";
-let rest="60–90 seconds";
-
-if(level==="intermediate"){
-
-sets=3;
-intensity="RPE 7–8";
-rest="90–120 seconds";
-
-}
-
-if(level==="advanced"){
-
-sets=3;
-intensity="RPE 8–9";
-rest="120–180 seconds";
-
-}
-
-
-/* REP RANGE */
-
-let reps="8–12";
-
-if(goal==="strength"){
-reps="4–8";
-}
-
-if(goal==="fatloss"){
-reps="8–15";
-}
-
-if(goal==="muscle"){
-reps="8–12";
-}
-
-if(goal==="fitness"){
-reps="10–15";
-}
-
-if(goal==="performance"){
-reps="6–10";
-}
-
-
-/* EXERCISE GROUPS */
-
-let strengthExercises=[
-
-"Squat",
-"Push-up / Bench Press",
-"Row",
-"Romanian Deadlift",
-"Overhead Press"
-
-];
-
-let aerobicExercises=[
-
-"Brisk Walking – 20–30 min",
-"Jogging – 15–25 min",
-"Cycling – 20–30 min",
-"Football / Soccer – 30–60 min"
-
-];
-
-let coreExercises=[
-
-"Plank – 2 × 20–45 sec",
-"Dead Bug – 2 × 8–12",
-"Bird Dog – 2 × 8–12",
-"Side Plank – 2 × 20–40 sec"
-
-];
-
-let mobilityExercises=[
-
-"Shoulder Mobility – 2 × 10",
-"Hip Mobility – 2 × 10",
-"Thoracic Rotation – 2 × 10",
-"Ankle Mobility – 2 × 10"
-
-];
-
-
-/* BUILD WEEKLY PROGRAM */
-
-let weeklyProgram="";
-
-
-for(let day=1; day<=days; day++){
-
-let html="<div class='day'>";
-
-html+="<h3>Day "+day+"</h3>";
-
-
-/* STRENGTH ONLY */
-
-if(combination==="strength"){
-
-let index=(day-1)%strengthExercises.length;
-
-html+=
-"<div class='exercise'><b>"+
-strengthExercises[index]+
-"</b><br>"+
-sets+" sets × "+reps+
-"<br>Intensity: "+intensity+
-"<br>Rest: "+rest+
-"</div>";
-
-}
-
-
-/* STRENGTH + AEROBIC */
-
-if(combination==="strength_aerobic"){
-
-let s=(day-1)%strengthExercises.length;
-let a=(day-1)%aerobicExercises.length;
-
-html+=
-"<div class='exercise'><b>Strength</b><br>"+
-strengthExercises[s]+
-"<br>"+
-sets+" sets × "+reps+
-"<br>Intensity: "+intensity+
-"<br>Rest: "+rest+
-"</div>";
-
-html+=
-"<div class='exercise'><b>Aerobic</b><br>"+
-aerobicExercises[a]+
-"</div>";
-
-}
-
-
-/* STRENGTH + CORE */
-
-if(combination==="strength_core"){
-
-let s=(day-1)%strengthExercises.length;
-let c=(day-1)%coreExercises.length;
-
-html+=
-"<div class='exercise'><b>Strength</b><br>"+
-strengthExercises[s]+
-"<br>"+
-sets+" sets × "+reps+
-"<br>Intensity: "+intensity+
-"<br>Rest: "+rest+
-"</div>";
-
-html+=
-"<div class='exercise'><b>Core</b><br>"+
-coreExercises[c]+
-"</div>";
-
-}
-
-
-/* AEROBIC + CORE */
-
-if(combination==="aerobic_core"){
-
-let a=(day-1)%aerobicExercises.length;
-let c=(day-1)%coreExercises.length;
-
-html+=
-"<div class='exercise'><b>Aerobic</b><br>"+
-aerobicExercises[a]+
-"</div>";
-
-html+=
-"<div class='exercise'><b>Core</b><br>"+
-coreExercises[c]+
-"</div>";
-
-}
-
-
-/* STRENGTH + MOBILITY */
-
-if(combination==="strength_mobility"){
-
-let s=(day-1)%strengthExercises.length;
-let m=(day-1)%mobilityExercises.length;
-
-html+=
-"<div class='exercise'><b>Strength</b><br>"+
-strengthExercises[s]+
-"<br>"+
-sets+" sets × "+reps+
-"<br>Intensity: "+intensity+
-"<br>Rest: "+rest+
-"</div>";
-
-html+=
-"<div class='exercise'><b>Mobility</b><br>"+
-mobilityExercises[m]+
-"</div>";
-
-}
-
-
-/* STRENGTH + AEROBIC + CORE */
-
-if(combination==="strength_aerobic_core"){
-
-let s=(day-1)%strengthExercises.length;
-let a=(day-1)%aerobicExercises.length;
-let c=(day-1)%coreExercises.length;
-
-html+=
-"<div class='exercise'><b>Strength</b><br>"+
-strengthExercises[s]+
-"<br>"+
-sets+" sets × "+reps+
-"<br>Intensity: "+intensity+
-"<br>Rest: "+rest+
-"</div>";
-
-html+=
-"<div class='exercise'><b>Aerobic</b><br>"+
-aerobicExercises[a]+
-"</div>";
-
-html+=
-"<div class='exercise'><b>Core</b><br>"+
-coreExercises[c]+
-"</div>";
-
-}
-
-
-html+="</div>";
-
-weeklyProgram+=html;
-
-}
-
-
-/* FINAL OUTPUT */
-
-let combinationName=
-document.getElementById("combination")
-.options[
-document.getElementById("combination").selectedIndex
-].text;
-
-
-document.getElementById("programResult").innerHTML=
-
-"<h3>Recommended Program</h3>"+
-
-"<b>Goal:</b> "+
-goal+
-
-"<br><b>Level:</b> "+
-level+
-
-"<br><b>Training Combination:</b> "+
-combinationName+
-
-"<br><b>Training Days:</b> "+
-days+
-
-"<br><b>Strength Intensity:</b> "+
-intensity+
-
-"<br><b>Rest:</b> "+
-rest+
-
-"<br><br>"+
-
-weeklyProgram+
-
-"<br><b>Warm-up:</b> 5–10 minutes before training."+
-
-"<br><b>Cool-down:</b> 5–10 minutes after training."+
-
-"<br><br><b>Progressive Overload:</b> "+
-"When the client completes the prescribed repetitions with good technique, gradually increase resistance, repetitions, or exercise difficulty.";
-
-}
-
-</script>
-
-</body>
-</html>
+<option value="1.2">
+Sedentary –
