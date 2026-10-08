@@ -1430,8 +1430,92 @@ function getDayName(type, day) {
 
     return "Training Session";
 }
+<div class="card">
+    <h2>🍽️ Ethiopian Food Nutrition Database</h2>
 
+    <label>Select Food</label>
+    <select id="foodSelect">
+        <option value="">-- Select Ethiopian Food --</option>
+        <option value="injera">Injera</option>
+        <option value="misir">Misir Wot</option>
+        <option value="shiro">Shiro Wot</option>
+        <option value="tibs">Tibs</option>
+        <option value="egg">Boiled Egg</option>
+        <option value="yogurt">Ergo / Plain Yogurt</option>
+        <option value="potato">Boiled Potato</option>
+        <option value="oats">Oats</option>
+        <option value="banana">Banana</option>
+        <option value="avocado">Avocado</option>
+        <option value="orange">Orange</option>
+        <option value="bread">Bread</option>
+        <option value="kinche">Kinche</option>
+        <option value="aja">Aja</option>
+        <option value="nuts">Mixed Nuts</option>
+    </select>
+
+    <label>Number of Servings</label>
+    <input type="number" id="foodServings" value="1" min="0.25" step="0.25">
+
+    <button onclick="calculateFoodNutrition()">Calculate Nutrition</button>
+
+    <div id="foodResult" class="result"></div>
+</div>
 </script>
-
+const foodDatabase = {
+    injera: {
+        name: "Injera",
+        serving: "1 medium piece (~100 g)",
+        calories: 170,
+        protein: 5,
+        carbs: 35,
+        fat: 1
+    },
+    misir: {
+        name: "Misir Wot",
+        serving: "1 cup (~200 g)",
+        calories: 280,
+        protein: 14,
+        carbs: 40,
+        fat: 7
+    },
+    shiro: {
+        name: "Shiro Wot",
+        serving: "1 cup (~200 g)",
+        calories: 300,
+        protein: 12,
+        carbs: 35,
+        fat: 12
+    },
+    tibs: {
+        name: "Tibs",
+        serving: "100 g",
+        calories: 250,
+        protein: 25,
+        carbs: 5,
+        fat: 14
+    },
+    egg: {
+        name: "Boiled Egg",
+        serving: "1 large egg (~50 g)",
+        calories: 72,
+        protein: 6.3,
+        carbs: 0.4,
+        fat: 4.8
+    },
+    yogurt: {
+        name: "Ergo / Plain Yogurt",
+        serving: "1 cup (~240 g)",
+        calories: 140,
+        protein: 8,
+        carbs: 11,
+        fat: 7
+    },
+    potato: {
+        name: "Boiled Potato",
+        serving: "1 medium (~150 g)",
+        calories: 130,
+        protein: 3,
+        carbs: 30,
+        fat: 0.
 </body>
 </html>
