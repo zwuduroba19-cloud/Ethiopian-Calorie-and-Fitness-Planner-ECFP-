@@ -445,39 +445,165 @@ function createProgram() {
 
         if (type === "strength_aerobic") {
 
-            program += `
-                <div class="exercise">
-                    <strong>Aerobic Conditioning</strong><br>
-                    Brisk walking, jogging, cycling or football — 20–30 minutes
-                </div>
-            `;
-        }
-    }
+<!-- ADVANCED TRAINING PROGRAM -->
+<div id="trainingProgram" class="section">
+    <h2>Advanced Training Program</h2>
 
-    program += `
+    <label for="trainingGoal">Training Goal</label>
+    <select id="trainingGoal">
+        <option value="muscle">Muscle Building</option>
+        <option value="strength">Strength Development</option>
+        <option value="fatloss">Fat Loss</option>
+        <option value="fitness">General Fitness</option>
+    </select>
+
+    <label for="trainingLevel">Current Level</label>
+    <select id="trainingLevel">
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="advanced">Advanced</option>
+    </select>
+
+    <label for="trainingType">Training Type</label>
+    <select id="trainingType">
+        <option value="strength">Strength</option>
+        <option value="aerobic">Aerobic</option>
+        <option value="core">Core</option>
+        <option value="strength_aerobic">Strength + Aerobic</option>
+        <option value="strength_core">Strength + Core</option>
+        <option value="aerobic_core">Aerobic + Core</option>
+    </select>
+
+    <label for="trainingDays">Training Days Per Week</label>
+    <select id="trainingDays">
+        <option value="2">2 Days</option>
+        <option value="3">3 Days</option>
+        <option value="4">4 Days</option>
+        <option value="5">5 Days</option>
+        <option value="6">6 Days</option>
+    </select>
+
+    <button onclick="createProgram()">Create Advanced Program</button>
+
+    <div id="programResult"></div>
+</div>
+
+<script>
+function createProgram() {
+
+    const goal = document.getElementById("trainingGoal").value;
+    const level = document.getElementById("trainingLevel").value;
+    const type = document.getElementById("trainingType").value;
+    const days = parseInt(document.getElementById("trainingDays").value);
+
+    let strengthExercises = [
+        ["Squat", "3", goal === "strength" ? "4–6" : "8–12"],
+        ["Push-Up / Bench Press", "3", goal === "strength" ? "4–6" : "8–12"],
+        ["Row", "3", goal === "strength" ? "4–6" : "8–12"],
+        ["Lunge", "2", "8–12 each leg"],
+        ["Hip Hinge / Romanian Deadlift", "3", "8–10"]
+    ];
+
+    let coreExercises = [
+        ["Plank", "3", "30–60 sec"],
+        ["Dead Bug", "2", "10–15 each side"],
+        ["Bird Dog", "2", "10–15 each side"],
+        ["Side Plank", "2", "20–45 sec each side"]
+    ];
+
+    let aerobicExercises = [
+        ["Brisk Walking", "1", "25–40 min"],
+        ["Jogging", "1", "20–30 min"],
+        ["Cycling", "1", "25–40 min"],
+        ["Football", "1", "45–60 min"]
+    ];
+
+    let result = `
+        <div class="program-card">
+        <h3>Your Advanced Weekly Program</h3>
+        <p><strong>Goal:</strong> ${goal.replace("_"," ")}</p>
+        <p><strong>Level:</strong> ${level}</p>
+        <p><strong>Training Type:</strong> ${type.replaceAll("_"," + ")}</p>
+        <p><strong>Training Days:</strong> ${days} days/week</p>
         <hr>
-
-        <h3>Training Principles</h3>
-
-        <p>
-        <strong>Mechanical Tension:</strong>
-        Use appropriate resistance and controlled movement.
-        </p>
-
-        <p>
-        <strong>Progressive Overload:</strong>
-        Gradually increase resistance, repetitions, quality or duration.
-        </p>
-
-        <p>
-        <strong>Recovery:</strong>
-        Allow adequate recovery between training sessions.
-        </p>
     `;
 
-    document.getElementById("programResult").innerHTML = program;
+    let weeklyPlan = [];
+
+    if (type === "strength") {
+        weeklyPlan = strengthSchedule(days);
+    }
+
+    if (type === "aerobic") {
+        weeklyPlan = aerobicSchedule(days);
+    }
+
+    if (type === "core") {
+        weeklyPlan = coreSchedule(days);
+    }
+
+    if (type === "strength_aerobic") {
+        weeklyPlan = mixedStrengthAerobic(days);
+    }
+
+    if (type === "strength_core") {
+        weeklyPlan = mixedStrengthCore(days);
+    }
+
+    if (type === "aerobic_core") {
+        weeklyPlan = mixedAerobicCore(days);
+    }
+
+    weeklyPlan.forEach((day, index) => {
+
+        result += `<h4>Day ${index + 1} – ${day.name}</h4>`;
+
+        day.exercises.forEach(ex => {
+            result += `
+                <div class="exercise">
+                    <strong>${ex[0]}</strong><br>
+                    Sets: ${ex[1]} | Reps/Time: ${ex[2]}
+                </div>
+            `;
+        });
+
+        result += `<p><em>Rest/recovery: 60–120 sec between strength sets.</em></p>`;
+    });
+
+    result += `
+        <hr>
+        <h4>Training Principles</h4>
+        <ul>
+            <li>Use progressive overload gradually.</li>
+            <li>Maintain good exercise technique.</li>
+            <li>Stop or reduce intensity when technique breaks down.</li>
+            <li>Allow adequate recovery between demanding sessions.</li>
+            <li>Increase resistance, repetitions, or training quality gradually.</li>
+            <li>Maximum 3 sets per exercise.</li>
+        </ul>
+
+        <h4>Warm-Up</h4>
+        <p>5–10 minutes of light aerobic activity followed by dynamic movements.</p>
+
+        <h4>Cool-Down</h4>
+        <p>5–10 minutes of low-intensity activity and gentle mobility exercises.</p>
+        </div>
+    `;
+
+    document.getElementById("programResult").innerHTML = result;
 }
 
+
+function strengthSchedule(days) {
+
+    let plans = [];
+
+    for (let i = 0; i < days; i++) {
+        plans.push({
+            name: i % 2 === 0 ? "Strength – Full Body A" : "Strength – Full Body B",
+            exercises: [
+                ["Squat", "3", "8–12"],
+                ["Push-Up / Bench Press", "
 </script>
 
 </body>
