@@ -1452,7 +1452,144 @@ oats: {
 
 }
 
-</script>
+(function () {
+  const mealFoods = {
+    injera: { name: "Injera", kcal: 170, p: 5, c: 35, f: 1 },
+    misir: { name: "Misir Wot", kcal: 150, p: 8, c: 22, f: 4 },
+    shiro: { name: "Shiro Wot", kcal: 160, p: 7, c: 18, f: 7 },
+    tibs: { name: "Beef Tibs", kcal: 250, p: 25, c: 2, f: 16 },
+    egg: { name: "Boiled Egg", kcal: 155, p: 13, c: 1.1, f: 11 },
+    yogurt: { name: "Ergo / Plain Yogurt", kcal: 61, p: 3.5, c: 4.7, f: 3.3 },
+    potato: { name: "Boiled Potato", kcal: 87, p: 1.9, c: 20, f: 0.1 },
+    nuts: { name: "Nuts", kcal: 607, p: 20, c: 21, f: 54 },
+    chickenBreast: { name: "Chicken Breast, cooked skinless", kcal: 165, p: 31, c: 0, f: 3.6 },
+    beef: { name: "Beef, cooked lean", kcal: 220, p: 26, c: 0, f: 12 },
+    kitfo: { name: "Kitfo", kcal: 300, p: 24, c: 0, f: 22 },
+    doroWot: { name: "Doro Wot", kcal: 175, p: 14, c: 6, f: 10.5 },
+    boiledLentils: { name: "Boiled Lentils", kcal: 116, p: 9, c: 20, f: 0.4 },
+    avocado: { name: "Avocado", kcal: 160, p: 2, c: 9, f: 15 },
+    oats: { name: "Oats, dry", kcal: 379, p: 12.5, c: 67.5, f: 7.5 }
+  };
 
-</body>
+  const options = Object.entries(mealFoods)
+    .map(([key, food]) =>
+      `<option value="${key}">${food.name}</option>`
+    ).join("");
+
+  document.body.insertAdjacentHTML("beforeend", `
+    <section id="combinedMealCalculator"
+      style="max-width:700px;margin:25px auto;padding:18px;
+      border:1px solid #ccc;border-radius:12px;
+      font-family:Arial,sans-serif;">
+      <h2>Combined Meal Nutrition Calculator</h2>
+      <p>Select several foods and enter the amount of each food in grams.</p>
+      <div id="combinedMealRows"></div>
+      <button type="button" id="addMealFood"
+        style="padding:10px;margin:8px 4px;">
+        + Add Another Food
+      </button>
+      <button type="button" id="calculateCombinedMeal"
+        style="padding:10px;margin:8px 4px;">
+        Calculate Total Nutrition
+      </button>
+      <button type="button" id="clearCombinedMeal"
+        style="padding:10px;margin:8px 4px;">
+        Clear Meal
+      </button>
+      <div id="combinedMealResult"
+        aria-live="polite"
+        style="margin-top:15px;padding:12px;"></div>
+      <p style="font-size:12px;color:#666;">
+        Nutrition values are estimates per 100 g.
+        Actual values vary with recipes and cooking methods.
+      </p>
+    </section>
+  `);
+
+  const rows = document.getElementById("combinedMealRows");
+  const result = document.getElementById("combinedMealResult");
+
+  function addFoodRow() {
+    const row = document.createElement("div");
+    row.className = "combined-meal-row";
+    row.style.cssText =
+      "display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0;";
+
+    row.innerHTML = `
+      <select aria-label="Choose food"
+        style="padding:10px;flex:2;min-width:180px;">
+        ${options}
+      </select>
+      <input type="number" aria-label="Food amount in grams"
+        min="1" max="10000" step="1" value="100"
+        style="padding:10px;width:95px;">
+      <span>grams</span>
+      <button type="button" class="removeMealFood"
+        style="padding:8px;">Remove</button>
+    `;
+
+    row.querySelector(".removeMealFood").addEventListener("click", () => {
+      row.remove();
+      result.innerHTML = "";
+    });
+
+    rows.appendChild(row);
+  }
+
+  addFoodRow();
+
+  document.getElementById("addMealFood").addEventListener("click", () => {
+    addFoodRow();
+  });
+
+  document.getElementById("clearCombinedMeal").addEventListener("click", () => {
+    rows.innerHTML = "";
+    result.innerHTML = "";
+    addFoodRow();
+  });
+
+  document.getElementById("calculateCombinedMeal").addEventListener("click", () => {
+    let calories = 0;
+    let protein = 0;
+    let carbs = 0;
+    let fat = 0;
+    let totalGrams = 0;
+    let count = 0;
+
+    for (const row of rows.querySelectorAll(".combined-meal-row")) {
+      const key = row.querySelector("select").value;
+      const grams = Number(row.querySelector("input").value);
+      const food = mealFoods[key];
+
+      if (!Number.isFinite(grams) || grams <= 0 || !food) {
+        result.innerHTML = "Please enter a valid food amount in grams.";
+        return;
+      }
+
+      calories += food.kcal * grams / 100;
+      protein += food.p * grams / 100;
+      carbs += food.c * grams / 100;
+      fat += food.f * grams / 100;
+      totalGrams += grams;
+      count++;
+    }
+
+    if (count === 0) {
+      result.innerHTML = "Please add at least one food.";
+      return;
+    }
+
+    result.innerHTML = `
+      <h3>Total Meal Nutrition</h3>
+      <p><strong>Total food weight:</strong> ${totalGrams.toFixed(0)} g</p>
+      <p><strong>Calories:</strong> ${calories.toFixed(1)} kcal</p>
+      <p><strong>Protein:</strong> ${protein.toFixed(1)} g</p>
+      <p><strong>Carbohydrates:</strong> ${carbs.toFixed(1)} g</p>
+      <p><strong>Fat:</strong> ${fat.toFixed(1)} g</p>
+    `;
+  });
+})();
+
+<</script>
+body>
 </html>
