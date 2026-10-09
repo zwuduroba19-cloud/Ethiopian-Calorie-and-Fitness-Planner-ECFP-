@@ -1,14 +1,22 @@
-manifest.json
 
 {
   "name": "Ethiopian Calorie & Fitness Planner",
   "short_name": "ECFP",
-  "description": "A fitness, exercise, body weight management and Ethiopian food nutrition planner created by Mr. Zenebe Wudu Ayene, MSc in Exercise Physiology.",
-  "start_url": "./",
-  "scope": "./",
+  "id": "/Ethiopian-Calorie-and-Fitness-Planner-ECFP-/",
+  "description": "Fitness assessment, body composition, exercise programming, body weight management, and Ethiopian food nutrition planning. Created by Mr. Zenebe Wudu Ayene, MSc in Exercise Physiology.",
+  "start_url": "/Ethiopian-Calorie-and-Fitness-Planner-ECFP-/",
+  "scope": "/Ethiopian-Calorie-and-Fitness-Planner-ECFP-/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#166534",
-  "orientation": "portrait",
-  "lang": "en"
+  "orientation": "any",
+  "background_color": "#EAF4FF",
+  "theme_color": "#087E8B",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "./app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
 }
